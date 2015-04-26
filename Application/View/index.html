@@ -1,0 +1,31 @@
+<html>
+<head>
+    <link rel="icon" href="/Chamada/Application/View/img/favicon.ico" type="image/x-icon" />
+	<title>Chamada</title>
+
+    <?php
+    	echo $GLOBALS['general_js'];
+    	echo $js;
+    	echo $GLOBALS['general_css'];
+    ?>
+
+</head>
+
+<body width="100%" style="width: 100%;" topmargin="0" leftmargin="0">
+
+	<div id="mainMenu">
+		<div id="addTurma" class="pointyWhenOver">Adicionar turma</div>
+		<div id="listarTurmas" class="pointyWhenOver">Listar turmas</div>
+		<div id="fazerChamada" class="pointyWhenOver">Fazer chamada</div>
+		<div id="LogMeOff" class="pointyWhenOver">Cancelar sessao</div>
+	</div>
+	
+	<div id="messageBox"></div>
+	<br />
+
+	<div id="container">
+		<?php echo $content; ?>
+	</div>
+
+</body>
+</html>
