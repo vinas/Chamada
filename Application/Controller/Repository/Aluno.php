@@ -69,16 +69,18 @@ class Aluno {
 			$this->db->updateRow(
 				$this->table,
 				array(
-					'turma',
-					'semestre',
-					'periodo'
+					'turmaId',
+					'nome',
+					'ra',
+					'foto',
+					'observacoes',
 				),
 				array(
-					$aluno->getTurma(),
-					$aluno->getSemestre(),
-					$aluno->getTurma(),
-					$aluno->getSemestre(),
-					$aluno->getPeriodo()
+					$aluno->getTurmaId(),
+					$aluno->getNome(),
+					$aluno->getRa(),
+					$aluno->getFoto(),
+					$aluno->getObservacoes()
 				),
 				"id = ".$aluno->getId()
 			);
@@ -105,14 +107,36 @@ class Aluno {
 		return false;
 	}
 
-	public function listByTurmaId($turmaId) {
+	public function deleteAllAlunosByTurmaId($turmaId) {
 		try {
-			return $this->db->getAllRows($this->table, '*', 'turmaId = '.$turmaId);
+			if (!$turmaId) {
+				throw new \Exception("ID da turma nao enviado");
+			}
+			$this->db->deleteRow(
+				$this->table,
+				"turmaId = ".$turmaId
+			);
+			return true;
 		} catch (Exception $e) {
-			die('['.$this->classPath.'::listAll] - '.  $e->getMessage());
+			die('['.$this->classPath.'::deleteAllAlunosByTurmaId] - '.  $e->getMessage());
 		}
-
+		return false;
 	}
 
+	public function listByTurmaId($turmaId, $limit = 0) {
+		try {
+			return $this->db->getAllRows($this->table, '*', 'turmaId = '.$turmaId.' ORDER BY nome', $limit);
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::listByTurmaId] - '.  $e->getMessage());
+		}
+	}
+
+	public function listBasicByTurmaId($turmaId) {
+		try {
+			return $this->db->getAllRows($this->table, 'id, nome', 'turmaId = '.$turmaId.' ORDER BY nome');
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::listBasicByTurmaId] - '.  $e->getMessage());
+		}
+	}
 
 }

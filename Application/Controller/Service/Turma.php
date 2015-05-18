@@ -16,6 +16,7 @@ namespace Application\Controller\Service;
 
 use Application\Controller\Entities\Turma as TurmaEntity;
 use Application\Controller\Repository\Turma as TurmaRepository;
+use Application\Controller\Repository\Aluno as AlunoRepository;
 
 class Turma {
 
@@ -39,10 +40,15 @@ class Turma {
 
 	public function listarTurmas() {
 		$turmas = $this->turmaRepository->listAll();
+		for ($i = 0; $i < count($turmas); $i++) {
+			$turmas[$i] = $this->validateObject($turmas[$i]);
+		}
 		return $turmas;
 	}
 
-	public function apagarTurma($turmaId = false) {
+	public function apagarTurma($turmaId) {
+		$alunoRepository = new AlunoRepository();
+		$alunoRepository->deleteAllAlunosByTurmaId($turmaId);
 		return $this->turmaRepository->deleteTurmaById($turmaId);
 	}
 

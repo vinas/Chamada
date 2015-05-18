@@ -17,8 +17,8 @@ use SaSeed\View;
 use SaSeed\Session;
 use SaSeed\URLRequest;
 
-//use Application\Controller\Service\Aluno as AlunoService;
 use Application\Model\Aluno as AlunoModel;
+use Application\Model\Chamada as ChamadaModel;
 use Application\Controller\Entities\Aluno as AlunoEntity;
 use Application\Controller\Service\Turma as TurmaService;
 use Application\Controller\Service\Aluno as AlunoService;
@@ -97,6 +97,38 @@ class AlunosController {
 			View::jsonEncode($response);
 		} catch (Exception $e) {
 			die('['.$this->classPath.'::apagarTurma] - '.  $e->getMessage());
+		}
+	}
+
+	public function carregarAluno() {
+		try {
+			$URLRequest = new URLRequest();
+			$alunoService = new AlunoService();
+			$chamadaModel = new ChamadaModel();
+			$params = $URLRequest->getParams();
+			$aluno = $alunoService->getById($params['idAluno']);
+			$response['response'] = 1;
+			$response['content'] = $chamadaModel->alunoLayer($aluno);
+			View::jsonEncode($response);
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::apagarTurma] - '.  $e->getMessage());
+		}
+	}
+
+	public function abrirAluno() {
+		try {
+			$URLRequest = new URLRequest();
+			$alunoService = new AlunoService();
+			$turmaService = new TurmaService();
+			$alunoModel = new AlunoModel();
+			$params = $URLRequest->getParams();
+			$aluno = $alunoService->getById($params['key']);
+			$turma = $turmaService->getById($aluno->getTurmaId());
+			$response['response'] = 1;
+			$response['content'] = $alunoModel->alunoForm($aluno, $turma);
+			View::jsonEncode($response);
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::abrirAluno] - '.  $e->getMessage());
 		}
 	}
 

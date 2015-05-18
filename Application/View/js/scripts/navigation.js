@@ -20,9 +20,14 @@ $(document).on("ready", function() {
 		$.loadToContainer("/Chamada/Turmas/abrirTurma", $(this).attr("key"));
 	});
 
-	$(document).on("click", "#fazerChamada", function() {
-		$.loadJsonToContainer("/Chamada/Chamada/fazerChamada");
+	$(document).on("click", "#chamada", function() {
+		$.loadToContainer("/Chamada/Chamada/");
 	});
+
+	$(document).on("click", ".abrirAluno", function() {
+		$.loadJsonToContainer("/Chamada/Alunos/abrirAluno", $(this).attr("key"));
+	});
+
 
 	$.loadToContainer = function(url, key) {
 		if (key) {

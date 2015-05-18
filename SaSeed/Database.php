@@ -94,10 +94,13 @@ class Database {
 	 * @param integer	- Máximo de registros (paginação)
 	 *
 	 * @return mixed */
-	public function getAllRows($table, $selectWhat = '*', $conditions = '1', $limit = 0, $max = 0) {
+	public function getAllRows($table, $selectWhat = '*', $conditions = '1', $limit = false, $max = false) {
 		$query = 'SELECT '.$selectWhat.' FROM '.$table.' WHERE '.$conditions;
-		if (($max != 0) && ($limit != 0)) {
-			$query .= ' LIMIT '.$limit.', '.$max;
+		if ($limit) {
+			$query .= ' LIMIT '.$limit;
+			if ($max) {
+				$query .= ', '.$max;
+			}
 		}
 		return $this->fetch($this->runQuery($query));
 	}

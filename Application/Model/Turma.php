@@ -55,18 +55,14 @@ class Turma {
 		if (count($turmas) > 0) {
 			$content .= '<div>';
 			foreach ($turmas as $turma) {
-				$content .= '<div><b>Id</b> - '.$turma['id'].'</div>'.PHP_EOL;
-				$content .= '<div><b>Turma</b> - '.$turma['turma'].'</div>'.PHP_EOL;
-				$content .= '<div><b>Semestre</b> - '.$turma['semestre'].'</div>'.PHP_EOL;
-				if ($turma['periodo'] == 1) {
-					$content .= '<div><b>Periodo</b> - Diurno</div>'.PHP_EOL;
-				} else if ($turma['periodo'] == 2) {
-					$content .= '<div><b>Periodo</b> - Noturno</div>'.PHP_EOL;
-				}
-				$content .= '<div class="pointyWhenOver addAluno" key="'.$turma['id'].'"><b>(Add Aluno)</b></div>'.PHP_EOL;
-				$content .= '<div class="pointyWhenOver listarAlunos" key="'.$turma['id'].'"><b>(Listar Alunos)</b></div>'.PHP_EOL;
-				$content .= '<div class="pointyWhenOver abrirTurma" key="'.$turma['id'].'"><b>(Editar)</b></div>'.PHP_EOL;
-				$content .= '<div class="pointyWhenOver apagarTurma" key="'.$turma['id'].'"><b>(Excluir - X)</b></div>'.PHP_EOL;
+				$content .= '<div><b>Id</b> - '.$turma->getId().'</div>'.PHP_EOL;
+				$content .= '<div><b>Turma</b> - '.$turma->getTurma().'</div>'.PHP_EOL;
+				$content .= '<div><b>Semestre</b> - '.$turma->getSemestre().'</div>'.PHP_EOL;
+				$content .= '<div><b>Periodo</b> - '.$turma->getPeriodoExtenso().'</div>'.PHP_EOL;
+				$content .= '<div class="pointyWhenOver addAluno" key="'.$turma->getId().'"><b>(Add Aluno)</b></div>'.PHP_EOL;
+				$content .= '<div class="pointyWhenOver listarAlunos" key="'.$turma->getId().'"><b>(Listar Alunos)</b></div>'.PHP_EOL;
+				$content .= '<div class="pointyWhenOver abrirTurma" key="'.$turma->getId().'"><b>(Editar)</b></div>'.PHP_EOL;
+				$content .= '<div class="pointyWhenOver apagarTurma" key="'.$turma->getId().'"><b>(Excluir - X)</b></div>'.PHP_EOL;
 				$content .= '<br />'.PHP_EOL;
 			}
 			$content .= '</div>';
@@ -109,7 +105,7 @@ class Turma {
 		$content .= '	</form>'.PHP_EOL;
 		$content .= '</div>'.PHP_EOL;
 
-return $content;
+		return $content;
 	}
 
 }

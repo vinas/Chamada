@@ -37,7 +37,27 @@ class Aluno {
 	}
 
 	public function listarAlunosByTurmaId($turmaId) {
-		return $this->alunoRepository->listByTurmaId($turmaId);
+		$alunos = $this->alunoRepository->listByTurmaId($turmaId);
+		for ($i = 0; $i < count($alunos); $i++) {
+			$alunos[$i] = $this->validateObject($alunos[$i]);
+		}
+		return $alunos;
+	}
+
+	public function getPrimeirosDoisAlunosByTurmaId($turmaId) {
+		$alunos = $this->alunoRepository->listByTurmaId($turmaId, 2);
+		for ($i = 0; $i < count($alunos); $i++) {
+			$alunos[$i] = $this->validateObject($alunos[$i]);
+		}
+		return $alunos;
+	}
+
+	public function getAlunosIdsByTurmaId($turmaId) {
+		$alunos = $this->alunoRepository->listBasicByTurmaId($turmaId);
+		for ($i = 0; $i < count($alunos); $i++) {
+			$alunos[$i] = $this->validateObject($alunos[$i]);
+		}
+		return $alunos;
 	}
 
 	public function apagarAluno($id) {

@@ -1,6 +1,9 @@
 body {
 	width: 100%;
 	height: 100%;
+	background-image: url('/Chamada/Application/View/img/background.png');
+	background-repeat: repeat;
+	text-align: center;
 }
 
 .messageBox {
@@ -9,5 +12,86 @@ body {
 
 .pointyWhenOver:hover {
 	cursor: pointer;
-	text-decoration: underline;
+}
+
+.alunoContainer {
+	position: absolute;
+	float: left;
+	width: 400px;
+}
+#alunoContainer {
+	background-color: #565;
+}
+
+#preAlunoContainer {
+	background-color: #CCC;
+}
+
+#loginForm label {
+	float: left;
+}
+
+#loginForm .loginInput {
+	float: right;
+}
+
+#container {
+	margin-top: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 400px;
+	text-align: left;
+}
+
+
+/*** MENU ***/
+
+#mainMenu {
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+ 	width: 400px;
+	text-align: center;
+}
+
+#mainMenu #chamada {
+	margin-left: 8%;
+	float: left;
+	padding: 5px;
+	background-color: #7D7D7D;
+}
+
+#mainMenu #chamada:hover,
+#mainMenu #listarTurmas:hover,
+#mainMenu #LogMeOff:hover
+{
+	background-color: #FFF;
+}
+
+#mainMenu #listarTurmas {
+	margin-left: 7%;
+	float: left;
+	padding: 5px;
+	background-color: #7D7D7D;
+}
+
+#mainMenu #LogMeOff {
+	margin-right: 8%;
+	float: right;
+	padding: 5px;
+	background-color: #7D7D7D;
+}
+
+/*** FONTS ***/
+
+.mainText {
+	font-family: Verdana;
+	font-size: 12px;
+	color: #000;
+}
+
+.bigText {
+	font-family: Verdana;
+	font-size: 14px;
+	color: #000;
 }
