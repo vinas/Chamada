@@ -16,7 +16,7 @@ $(document).on("ready", function() {
 
 	$(document).on("submit", "#formNovaTurma", function() {
 		$.post ("/Chamada/Turmas/salvarTurma", $(this).serialize(), function(res) {
-			$.displayTimedContent($("#messageBox"), res.message, 2000);
+			$.displayTimedAlert($("#messageBox"), res.message, 2000);
 		}, "json");
 		$("#formNovaTurma")[0].reset();
 		return false;
@@ -24,7 +24,7 @@ $(document).on("ready", function() {
 
 	$(document).on("submit", "#formEditaTurma", function() {
 		$.post ("/Chamada/Turmas/editarTurma", $(this).serialize(), function(res) {
-			$.displayTimedContent($("#messageBox"), res.message, 2000);
+			$.displayTimedAlert($("#messageBox"), res.message, 3000);
 			$("#listarTurmas").click();
 		}, "json");
 		$("#formEditaTurma")[0].reset();
@@ -33,7 +33,7 @@ $(document).on("ready", function() {
 
 	$(document).on("submit", "#formNovoAluno", function() {
 		$.post ("/Chamada/Alunos/salvarAluno", $(this).serialize(), function(res) {
-			$.displayTimedContent($("#messageBox"), res.message, 2000);
+			$.displayTimedAlert($("#messageBox"), res.message, 2000);
 		}, "json");
 		$("#formNovoAluno")[0].reset();
 		return false;
@@ -41,7 +41,7 @@ $(document).on("ready", function() {
 
 	$(document).on("submit", "#formEditaAluno", function() {
 		$.post ("/Chamada/Alunos/salvarAluno", $(this).serialize(), function(res) {
-			$.displayTimedContent($("#messageBox"), res.message, 2000);
+			$.displayTimedAlert($("#messageBox"), res.message, 3000);
 			$.loadJsonToContainer("/Chamada/Alunos/listarAlunos", $("#turmaId").val());
 		}, "json");
 		return false;
@@ -53,7 +53,7 @@ $(document).on("ready", function() {
 
 	$(document).on("click", ".apagarTurma", function() {
 		$.post ("/Chamada/Turmas/apagarTurma", {turmaId: $(this).attr("key")}, function(res) {
-			$.displayTimedContent($("#messageBox"), res.message, 2000);
+			$.displayTimedAlert($("#messageBox"), res.message, 2000);
 			$.displayAnimatedContent($("#container"), res.content);
 		}, "json");
 	});
@@ -67,6 +67,10 @@ $(document).on("ready", function() {
 
 	$(document).on("change", "#turmaId", function() {
 		$.loadToContainer("/Chamada/Chamada/fazerChamada", $(this).val());
+	});
+
+	$(document).on("click", ".chamada", function() {
+		$.loadToContainer("/Chamada/Chamada/fazerChamada", $(this).attr("key"));
 	});
 
 	$(document).on("click", "#alunoContainer #veio", function() {
@@ -132,18 +136,34 @@ $(document).on("ready", function() {
 		}
 	};
 
+	$.displayTimedAlert = function(obj, content, msecs) {
+		$.displayAnimatedAlert(obj, content);
+		setTimeout(function() {
+			obj.slideUp(200);
+		}, msecs);
+	};
+
 	$.displayTimedContent = function(obj, content, msecs) {
 		$.displayAnimatedContent(obj, content);
 		setTimeout(function() {
-			obj.hide(200);
+			obj.slideUp(200);
 		}, msecs);
 	};
 
 	$.displayAnimatedContent = function(obj, content, msecs) {
-		obj.hide();
-		obj.html(content);
-		if (!msecs) msecs = 400;  
-		obj.show(400);
+		if (!msecs) msecs = 400;
+		obj.slideUp(200);
+		setTimeout(function() {
+			obj.html(content).slideDown(msecs);
+		}, 200);
+	};
+
+	$.displayAnimatedAlert = function(obj, content, msecs) {
+		if (!msecs) msecs = 400;
+		obj.hide(200);
+		setTimeout(function() {
+			obj.html(content).show(msecs);
+		}, 200);
 	};
 
 	$.getNextStudenId = function() {

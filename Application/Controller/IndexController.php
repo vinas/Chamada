@@ -34,7 +34,7 @@ class IndexController {
 	*/
 	public static function index() {
 		$ModIndex	= new ModIndex();
-		$data		= 'Tela principal';
+		$data		= '';
 		$content	= $ModIndex->modelate($data);
 		View::set('content', $content);
 		View::render('index');
