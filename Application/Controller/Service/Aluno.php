@@ -36,6 +36,10 @@ class Aluno {
 		return $aluno;
 	}
 
+	public function salvarObservacao($alunoId, $obs) {
+		return $this->alunoRepository->updateObs($alunoId, $obs);
+	}
+
 	public function listarAlunosByTurmaId($turmaId) {
 		$alunos = $this->alunoRepository->listByTurmaId($turmaId);
 		for ($i = 0; $i < count($alunos); $i++) {
@@ -62,6 +66,16 @@ class Aluno {
 
 	public function apagarAluno($id) {
 		return $this->alunoRepository->deleteById($id);
+	}
+
+	public function saveUploadedImage($foto) {
+		$path = 'C:\xampp\htdocs/Chamada/Application/View/img/';
+		$file = uniqid() . '.png';
+		if (!file_put_contents($path.$file, base64_decode($foto))) {
+			throw new \Exception("Nao foi possivel salvar a foto.");
+			return false;
+		}
+		return $file;
 	}
 
 	private function validateObject($alunoArray) {

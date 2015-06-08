@@ -37,7 +37,8 @@ class ChamadaController {
 		$turmaService = new TurmaService();
 		$chamadaModel = new ChamadaModel();
 		$turmas = $turmaService->listarTurmas();
-		View::set('content', $chamadaModel->home($turmas));
+		$turmasHoje = $turmaService->listTurmasChamadasHoje();
+		View::set('content', $chamadaModel->home($turmas, $turmasHoje));
 		View::render('partial_chamadaHome');
 	}
 

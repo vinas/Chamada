@@ -59,10 +59,13 @@ $(document).on("ready", function() {
 	});
 
 	$(document).on("click", ".apagarAluno", function() {
-		$.post ("/Chamada/Alunos/apagarAluno", {id: $(this).attr("key")}, function(res) {
-			$.displayTimedContent($("#messageBox"), res.message, 2000);
-			$.displayAnimatedContent($("#container"), res.content);
-		}, "json");
+		if (confirm("Deseja realmente APAGAR o(a) aluno(a)\n" + $(this).prev().html() + "?")) {
+			alert($(this).prev().html());
+			/*$.post ("/Chamada/Alunos/apagarAluno", {id: $(this).attr("key")}, function(res) {
+				$.displayTimedContent($("#messageBox"), res.message, 2000);
+				$.displayAnimatedContent($("#container"), res.content);
+			}, "json");*/
+		}
 	});
 
 	$(document).on("change", "#turmaId", function() {
@@ -81,19 +84,24 @@ $(document).on("ready", function() {
 		$.processaFalta();
 	});
 
+	$.salvarObservacao = function(idAluno, obs) {
+		$.post ("/Chamada/Alunos/salvarObservacao", {obs: obs, idAluno: idAluno});
+
+	};
+
 	$.processaPresenca = function() {
-		$.setPresence(
-			$("#idTurma").val(),
-			$("#alunoContainer #idAluno").val()
-		);
+		idAluno = $("#alunoContainer #idAluno").val();
+		obs = $("#alunoContainer #obsAluno").val();
+		$.salvarObservacao(idAluno, obs);
+		$.setPresence($("#idTurma").val(), idAluno);
 		$.loadStudent();
 	};
 
 	$.processaFalta = function() {
-		$.setAbsence(
-			$("#idTurma").val(),
-			$("#alunoContainer #idAluno").val()
-		);
+		idAluno = $("#alunoContainer #idAluno").val();
+		obs = $("#alunoContainer #obsAluno").val();
+		$.salvarObservacao(idAluno, obs);
+		$.setAbsence($("#idTurma").val(), idAluno);
 		$.loadStudent();
 	};
 
@@ -195,6 +203,7 @@ $(document).on("ready", function() {
 			$("#preAlunoContainer").html("");
 			$("#alunoContainer").html("");
 			alert("acabou a chamada");
+			$.loadToContainer("/Chamada/Chamada/");
 		}
 	};
 

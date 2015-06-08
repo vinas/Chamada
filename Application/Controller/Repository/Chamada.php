@@ -59,4 +59,12 @@ class Chamada {
 			die('['.$this->classPath.'::saveNewFalta] - '.  $e->getMessage());
 		}
 	}
+
+	public function listTurmasChamadasHoje() {
+		try {
+			return $this->db->getAllRows($this->table, 'turmaId', "1 AND data = '".General::mySqlDate()."' GROUP BY turmaId");
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::listTurmasChamadasHoje] - '.  $e->getMessage());
+		}
+	}
 }

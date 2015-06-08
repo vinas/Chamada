@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<?php
+	echo $GLOBALS['general_js'];
+	echo $GLOBALS['general_css'];
+?>
+</head>
+<body>
+	<form id="fotoForm">
+		<input type="hidden" name="foto" id="foto" />
+		<select id="cameraNames" size="1" onChange="changeCamera()" style="width:245px;font-size:10px;height:25px;"></select>
+		<div id="webcam"></div>
+		<img src="/Chamada/Application/View/img/camera.png" class="pointyWhenOver" id="btn2" onclick="base64_toimage()" />
+		<img id="image" style="width:200px;height:153px;"/>
+		<img src="/Chamada/Application/View/img/floppy.png" class="pointyWhenOver" id="salvarFoto" onclick="" />
+	</form>
+</body>
+</html>

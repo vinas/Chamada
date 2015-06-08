@@ -42,13 +42,10 @@ class IndexController {
 
 	public static function testInsert() {
 		$userService = new UserService();
-
 		$userArray["user"] = "Nome teste";
 		$userArray["email"] = "emailteste@teste.com";
 		$userArray["password"] = "abc123";
-
 		$data = $userService->saveNewUser($userArray);
-		
 		View::set('content', 'id do usuario criado: ' . $data);
 		View::render('index');
 	}

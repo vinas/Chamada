@@ -14,7 +14,6 @@ $(document).on("ready", function() {
 	});
 
 	$(document).on("click", ".listarAlunos", function() {
-		$.selectThis($(this));
 		$.loadJsonToContainer("/Chamada/Alunos/listarAlunos", $(this).attr("key"));
 	});
 

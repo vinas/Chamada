@@ -132,4 +132,35 @@ class AlunosController {
 		}
 	}
 
+	public function webcam() {
+		View::render('partial_webCam');
+	}
+
+	public function uploadFoto() {
+		try {
+			$URLRequest = new URLRequest();
+			$alunoService = new AlunoService();
+			$params = $URLRequest->getParams();
+			$file = $alunoService->saveUploadedImage($params['foto']);
+			$response['response'] = 1;
+			$response['message'] = $file;
+			View::jsonEncode($response);
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::uploadFoto] - '.  $e->getMessage());
+		}
+	}
+
+	public function salvarObservacao() {
+		try {
+			$URLRequest = new URLRequest();
+			$alunoService = new AlunoService();
+			$params = $URLRequest->getParams();
+			$response['message'] = $alunoService->salvarObservacao($params['idAluno'], $params['obs']);
+			$response['response'] = 1;
+			View::jsonEncode($response);
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::salvarTurma] - '.  $e->getMessage());
+		}
+	}
+
 }

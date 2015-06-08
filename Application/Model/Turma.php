@@ -56,10 +56,10 @@ class Turma {
 		if ($turma->getId() > 0) {
 			$content .= '	<form id="formEditaTurma">'.PHP_EOL;
 			$content .= '		<input type="hidden" name="id" id="id" value="'.$turma->getId().'" />'.PHP_EOL;
-			$content .= '		<div class="title">Editar turma</div>'.PHP_EOL;
+			$content .= '		<div class="formTitle">Editar turma</div>'.PHP_EOL;
 		} else {
 			$content .= '	<form id="formNovaTurma">'.PHP_EOL;
-			$content .= '		<div class="title">Nova turma</div>'.PHP_EOL;
+			$content .= '		<div class="formTitle">Nova turma</div>'.PHP_EOL;
 		}
 		$content .= '		<label for="turma">Turma:</label><input type="text" name="turma" id="turma" value="'.$turma->getTurma().'" /><br />'.PHP_EOL;
 		$content .= '		<label for="semestre">Semestre:</label>'.PHP_EOL;
@@ -85,29 +85,36 @@ class Turma {
 		$content .= '		</div>'.PHP_EOL;
 		$content .= '	</form>'.PHP_EOL;
 		$content .= '</div>'.PHP_EOL;
+		if ($turma->getId() > 0) {
+			$content .= '<div class="subContent" id="subContent">'.PHP_EOL;
+			$content .= '	<div class="pointyWhenOver listarAlunos actionButton" key="'.$turma->getId().'"><b>&bull; Listar Alunos &bull;</b></div>'.PHP_EOL;
+			$content .= '	<div class="pointyWhenOver actionButton addAluno" key="'.$turma->getId().'"><b>&bull; Novo Aluno &bull;</b></div>'.PHP_EOL;
+			$content .= '</div>'.PHP_EOL;
+		}
 
 		return $content;
 	}
 
 	public function listarTurmas($turmas) {
 		$content = '<div class="subMenu">'.PHP_EOL;
-		$content .= '	<div class="pointyWhenOver" id="novaTurma"><b>+ Adicionar Nova turma</b></div>'.PHP_EOL;
+		$content .= '	<div class="pointyWhenOver actionButton" id="novaTurma"><b>+ Adicionar Nova turma</b></div>'.PHP_EOL;
 		$content .= '</div>'.PHP_EOL;
 		if (count($turmas) > 0) {
 			$content .= $this->resultHeader();
+			$content .= '<div class="result_body">'.PHP_EOL;
 			foreach ($turmas as $turma) {
-				$content .= '<div class="return_row">'.PHP_EOL;
-				$content .= '	<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 35%;">'.$turma->getTurma().'</div>'.PHP_EOL;
-				$content .= '	<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 15%; text-align: center;">'.$turma->getSemestre().'</div>'.PHP_EOL;
-				$content .= '	<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 33%;">'.$turma->getPeriodoExtenso().'</div>'.PHP_EOL;
-				$content .= '	<div class="result_field chamada" key="'.$turma->getId().'" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Chamada</div>'.PHP_EOL;
+				$content .= '	<div class="return_row new">'.PHP_EOL;
+				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 35%;">'.$turma->getTurma().'</div>'.PHP_EOL;
+				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 15%; text-align: center;">'.$turma->getSemestre().'</div>'.PHP_EOL;
+				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 33%;">'.$turma->getPeriodoExtenso().'</div>'.PHP_EOL;
+				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Detalhes</div>'.PHP_EOL;
 				/*$content .= '<div class="pointyWhenOver addAluno" key="'.$turma->getId().'"><b>(Add Aluno)</b></div>'.PHP_EOL;
 				$content .= '		<div class="pointyWhenOver listarAlunos" key="'.$turma->getId().'"><b>(Listar Alunos)</b></div>'.PHP_EOL;
 				$content .= '		<div class="pointyWhenOver abrirTurma" key="'.$turma->getId().'"><b>(Editar)</b></div>'.PHP_EOL;
 				$content .= '		<div class="pointyWhenOver apagarTurma" key="'.$turma->getId().'"><b>(Excluir - X)</b></div>'.PHP_EOL;*/
 				$content .= '	</div>'.PHP_EOL;
-				$content .= '</div><br />'.PHP_EOL;
 			}
+			$content .= '</div>'.PHP_EOL;
 		}
 		return $content;
 	}
@@ -118,7 +125,8 @@ class Turma {
 		$content	.= '	<div class="result_header_field" style="width: 15%; text-align: center;">Semestre</div>'.PHP_EOL;
 		$content	.= '	<div class="result_header_field" style="width: 33%; text-align: center;">Periodo</div>'.PHP_EOL;
 		$content	.= '	<div class="result_header_field" style="width: 15%; text-align: center;">&nbsp;</div>'.PHP_EOL;
-		$content	.= '</div><br />'.PHP_EOL;
+		$content	.= '</div>'.PHP_EOL;
 		return $content;
 	}
+
 }

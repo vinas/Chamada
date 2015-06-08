@@ -17,6 +17,7 @@ namespace Application\Controller\Service;
 use Application\Controller\Entities\Turma as TurmaEntity;
 use Application\Controller\Repository\Turma as TurmaRepository;
 use Application\Controller\Repository\Aluno as AlunoRepository;
+use Application\Controller\Repository\Chamada as ChamadaRepository;
 
 class Turma {
 
@@ -44,6 +45,11 @@ class Turma {
 			$turmas[$i] = $this->validateObject($turmas[$i]);
 		}
 		return $turmas;
+	}
+
+	public function listTurmasChamadasHoje() {
+		$chamadaRepository = new ChamadaRepository();
+		return $chamadaRepository->listTurmasChamadasHoje();
 	}
 
 	public function apagarTurma($turmaId) {

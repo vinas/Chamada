@@ -40,10 +40,15 @@
 
 	// Define General JSs
 	$GLOBALS['general_js']	= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/jquery-2.1.1.min.js"></script>'.PHP_EOL;	// Se não houver, definir como vazio ''
+	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/jquery.fancybox.pack.js"></script>'.PHP_EOL;
+	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/swfobject.js"></script>'.PHP_EOL;
+	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/scriptcam.js"></script>'.PHP_EOL;
 	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/scripts/scripts.js"></script>'.PHP_EOL;
+	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/scripts/webcam.js"></script>'.PHP_EOL;
 
 	// Define General CSSs
 	$GLOBALS['general_css']	= '<link href="/Chamada/Application/View/css/styles.css" rel="stylesheet">'.PHP_EOL;	// Se não houver, definir como vazio ''
+	$GLOBALS['general_css']	.= '<link href="/Chamada/Application/View/css/jquery.fancybox.css" rel="stylesheet">'.PHP_EOL;
 
 	// ********************************************** \\
 	//	Load Specific Controller and Action Function  \\

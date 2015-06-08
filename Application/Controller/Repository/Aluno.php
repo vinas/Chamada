@@ -91,6 +91,24 @@ class Aluno {
 		return false;
 	}
 
+	public function updateObs($alunoId, $obs) {
+		try {
+			if (!$alunoId) {
+				throw new \Exception("Aluno sem ID");
+			}
+			$this->db->updateRow(
+				$this->table,
+				array('observacoes'),
+				array($obs),
+				"id = ".$alunoId
+			);
+			return true;
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::updateObs] - '.  $e->getMessage());
+		}
+		return false;
+	}
+
 	public function deleteById($id = false) {
 		try {
 			if (!$id) {
