@@ -94,7 +94,7 @@ $(document).on("ready", function() {
 		obs = $("#alunoContainer #obsAluno").val();
 		$.salvarObservacao(idAluno, obs);
 		$.setPresence($("#idTurma").val(), idAluno);
-		$.loadStudent();
+		$.loadStudent(true);
 	};
 
 	$.processaFalta = function() {
@@ -102,7 +102,7 @@ $(document).on("ready", function() {
 		obs = $("#alunoContainer #obsAluno").val();
 		$.salvarObservacao(idAluno, obs);
 		$.setAbsence($("#idTurma").val(), idAluno);
-		$.loadStudent();
+		$.loadStudent(false);
 	};
 
 	$.setPresence = function(idTurma, idAluno) {
@@ -126,6 +126,28 @@ $(document).on("ready", function() {
 	$.swapLayersContent = function() {
 		$("#alunoContainer").html($("#preAlunoContainer").html());
 		$("#preAlunoContainer").html("");
+	};
+
+	$.loadStudent = function(presente) {
+		if ($("#preAlunoContainer #idAluno").val()) {
+			margin = (presente) ? 200 : 0;
+			$("#alunoContainer").animate({
+				"margin-left": margin,
+				"opacity": 0
+			}, 300, function() {
+				$("#alunoContainer").css("margin-left", 100);
+				$.swapLayersContent();
+				$.loadBkgLayer();
+				$("#alunoContainer").animate({
+					"opacity": 100
+				}, 300);
+			});
+		} else {
+			$("#preAlunoContainer").html("").hide();
+			$("#alunoContainer").html("").hide();
+			alert("acabou a chamada");
+			$.loadToContainer("/Chamada/Chamada/");
+		}
 	};
 
 	$.loadBkgLayer = function() {
@@ -192,18 +214,6 @@ $(document).on("ready", function() {
 			$("#pilhaTurma").val("");
 		} else {
 			$("#pilhaTurma").val(pilha.substring(pos + 1));
-		}
-	};
-
-	$.loadStudent = function() {
-		if ($("#preAlunoContainer #idAluno").val()) {
-			$.swapLayersContent();
-			$.loadBkgLayer();
-		} else {
-			$("#preAlunoContainer").html("");
-			$("#alunoContainer").html("");
-			alert("acabou a chamada");
-			$.loadToContainer("/Chamada/Chamada/");
 		}
 	};
 

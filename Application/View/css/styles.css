@@ -65,6 +65,7 @@ input, textarea, select {
 
 #preAlunoContainer {
 	background-color: #CCC;
+	opacity: 0.35;
 }
 
 #loginForm label {
