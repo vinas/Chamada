@@ -69,7 +69,7 @@ class Aluno {
 	}
 
 	public function saveUploadedImage($foto) {
-		$path = 'C:\xampp\htdocs/Chamada/Application/View/img/';
+		$path = '/home/u760736354/public_html/Chamada/Application/View/img/';
 		$file = uniqid() . '.png';
 		if (!file_put_contents($path.$file, base64_decode($foto))) {
 			throw new \Exception("Nao foi possivel salvar a foto.");

@@ -108,10 +108,6 @@ class Turma {
 				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 15%; text-align: center;">'.$turma->getSemestre().'</div>'.PHP_EOL;
 				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 33%;">'.$turma->getPeriodoExtenso().'</div>'.PHP_EOL;
 				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Detalhes</div>'.PHP_EOL;
-				/*$content .= '<div class="pointyWhenOver addAluno" key="'.$turma->getId().'"><b>(Add Aluno)</b></div>'.PHP_EOL;
-				$content .= '		<div class="pointyWhenOver listarAlunos" key="'.$turma->getId().'"><b>(Listar Alunos)</b></div>'.PHP_EOL;
-				$content .= '		<div class="pointyWhenOver abrirTurma" key="'.$turma->getId().'"><b>(Editar)</b></div>'.PHP_EOL;
-				$content .= '		<div class="pointyWhenOver apagarTurma" key="'.$turma->getId().'"><b>(Excluir - X)</b></div>'.PHP_EOL;*/
 				$content .= '	</div>'.PHP_EOL;
 			}
 			$content .= '</div>'.PHP_EOL;

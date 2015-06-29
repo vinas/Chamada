@@ -46,7 +46,7 @@ class General {
 	 * @return string */
 	public static function mySqlDate ($data = 'now') {
 		// Se data não enviada
-		if ($data == 'now') {
+		if (($data == 'now') || ($data == false)) {
 			// Monta data com dia de hoje
 			$dt_dia	= date("d");
 			$dt_mes	= date("n");
@@ -66,10 +66,10 @@ class General {
 	 * @return string */
 	public static function mySqlNonUsDate ($data = 'now') {
 		// Se data não enviada
-		if ($data == 'now') {
+		if (($data == false) || ($data == 'now')) {
 			// Monta data com dia de hoje
 			$dt_dia	= date("d");
-			$dt_mes	= date("n");
+			$dt_mes	= date("m");
 			$dt_ano	= date("Y");
 			$data	= $dt_ano.'-'.$dt_mes.'-'.$dt_dia;
 		} else {
@@ -86,10 +86,10 @@ class General {
 	 * @return string */
 	public static function phpDate ($data = 'now') {
 		// Se data não enviada
-		if ($data == 'now') {
+		if (($data == false) || ($data == 'now')) {
 			// Monta data com dia de hoje
 			$dt_dia	= date("d");
-			$dt_mes	= date("n");
+			$dt_mes	= date("m");
 			$dt_ano	= date("Y");
 			$data	= $dt_dia.'/'.$dt_mes.'/'.$dt_ano;
 		} else {

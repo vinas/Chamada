@@ -93,7 +93,7 @@ class Aluno {
 		$content .= '		<label for="nome">Nome:</label><input type="text" name="nome" id="nome" value="'.$aluno->getNome().'" /><br />'.PHP_EOL;
 		$content .= '		<label for="ra">RA:</label><input type="text" name="ra" id="ra" value="'.$aluno->getRa().'" /><br />'.PHP_EOL;
 		$content .= '		<label for="observacoes">Observacoes:</label><textarea name="observacoes" id="observacoes">'.General::quotes($aluno->getObservacoes()).'</textarea><br />'.PHP_EOL;
-		$content .= '		<br /><br /><br /><br />'.PHP_EOL;
+		$content .= '		<br /><br /><br /><br /><br /><br /><br /><br />'.PHP_EOL;
 
 		$content .= '		<div class="formButtons">'.PHP_EOL;
 		$content .= '			<img id="submit" class="pointyWhenOver" src="/Chamada/Application/View/img/bt_add.png" />'.PHP_EOL;

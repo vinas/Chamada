@@ -14,6 +14,8 @@
 
 namespace Application\Controller\Service;
 
+use SaSeed\General;
+
 use Application\Controller\Repository\Chamada as ChamadaRepository;
 
 class Chamada {
@@ -24,12 +26,20 @@ class Chamada {
 		$this->chamadaRepository = new ChamadaRepository();
 	}
 
-	public function darPresenca($idTuma, $idAluno) {
-		return $this->chamadaRepository->saveNewPresenca($idTuma, $idAluno);
+	public function darPresenca($idTurma, $idAluno) {
+		return $this->chamadaRepository->saveNewPresenca($idTurma, $idAluno);
 	}
 	
-	public function darFalta($idTuma, $idAluno) {
-		return $this->chamadaRepository->saveNewFalta($idTuma, $idAluno);
+	public function darFalta($idTurma, $idAluno) {
+		return $this->chamadaRepository->saveNewFalta($idTurma, $idAluno);
+	}
+
+	public function getGrid($idTurma, $data = false) {
+		if (!$data) {
+			$data = General::phpDate();
+		}
+		return $this->chamadaRepository->getChamadaDataTurma($idTurma, General::mySqlNonUsDate($data));
+		return false;
 	}
 
 }

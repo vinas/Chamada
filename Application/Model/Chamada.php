@@ -19,22 +19,6 @@ class Chamada {
 
 	private $classPath = 'Application\Model\Chamada';
 
-	/*public function home($turmas) {
-		$content = '<br />'.PHP_EOL;
-		$content .= '<div>'.PHP_EOL;
-		$content .= '		Selecione a turma: '.PHP_EOL;
-		$content .= '		<select name="turmaId" id="turmaId">'.PHP_EOL;
-		$content .= '			<option value="0">selecione a turma...</option>'.PHP_EOL;
-		foreach ($turmas as $turma) {
-			$content .= '			<option value="'.$turma->getId().'">'
-										.$turma->getTurma().' - '.$turma->getPeriodoExtenso()
-										.' - '.$turma->getSemestre().'o S</option>'.PHP_EOL;
-		}	
-		$content .= '		</select>'.PHP_EOL;
-		$content .= '</div>'.PHP_EOL;
-		return $content;
-	}*/
-
 	public function home($turmas, $turmasHoje) {
 		$content = '';
 		if (count($turmas) > 0) {
@@ -57,12 +41,12 @@ class Chamada {
 				
 				if ($edit) {
 					$rowSubClass = 'edit';
-					$subClass = 'grid';
-					$action = '		<div class="result_field grid" key="'.$turma->getId().'" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Editar</div>'.PHP_EOL;
+					$subClass = 'editChamada';
+					$action = '		<div class="result_field '.$subClass.'" key="'.$turma->getId().'" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Editar</div>'.PHP_EOL;
 				} else {
 					$rowSubClass = 'new';
 					$subClass = 'chamada';
-					$action = '		<div class="result_field chamada" key="'.$turma->getId().'" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Chamada</div>'.PHP_EOL;
+					$action = '		<div class="result_field '.$subClass.'" key="'.$turma->getId().'" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Chamada</div>'.PHP_EOL;
 				}
 				
 				$content .= '	<div class="return_row '.$rowSubClass.'">'.PHP_EOL;
@@ -132,6 +116,64 @@ class Chamada {
 		$content .= '		<img id="naoVeio" class="pointyWhenOver salvarObservacao" src="/Chamada/Application/View/img/bt_cancel.png" />'.PHP_EOL;
 		$content .= '		<img id="veio" class="pointyWhenOver salvarObservacao" src="/Chamada/Application/View/img/bt_add.png" />'.PHP_EOL;
 		$content .= '		<br />'.PHP_EOL;
+		return $content;
+	}
+
+	public function grid($grid, $turma, $data) {
+		$content = '<div class="subMenu">'.PHP_EOL;
+		$content .= '	<div class="pointyWhenOver actionButton abrirTurma" key="'.$turma->getId().'"><b>'.$turma->getTurma().' - '.$turma->getPeriodoExtenso().' - '.$turma->getSemestre().'o Semestre</b></div>'.PHP_EOL;
+		$content .= '</div>'.PHP_EOL;
+		$content .= '<div class="chamadaTitle">'.PHP_EOL;
+		$content .= '	<div class="pointyWhenOver mudarData" id="mudarData">'.$data.'</div>'.PHP_EOL;
+		$content .= '	<div class="dataChamadaTurma" style="display: none;">'.PHP_EOL;
+		$content .= '		<input type="text" name="dataChamadaTurma" id="dataChamadaTurma" value="'.$data.'" style="display: block; float: none;" />'.PHP_EOL;
+		$content .= '		<img src="/Chamada/Application/View/img/" />'.PHP_EOL;
+		$content .= '	</div>'.PHP_EOL;
+		$content .= '</div>'.PHP_EOL;
+		$content .= '<div class="result_header">'.PHP_EOL;
+		$content .= '	<div class="result_header_field" style="width: 45%; text-align: center;">Aluno</div>'.PHP_EOL;
+		$content .= '	<div class="result_header_field" style="width: 30%; text-align: center;">Observação</div>'.PHP_EOL;
+		$content .= '	<div class="result_header_field" style="width: 15%; text-align: center;">Presente</div>'.PHP_EOL;
+		$content .= '</div>'.PHP_EOL;
+		$content .= '<div class="result_body">'.PHP_EOL;
+		foreach ($grid as $aluno) {
+			$content .= '	<div class="return_row new editChamadaAluno" key="'.$aluno['alunoId'].'" date="'.$data.'">'.PHP_EOL;
+			$content .= '		<div class="result_field" style="width: 45%; text-align: left;">'.$aluno['nome'].'</div>'.PHP_EOL;
+			if (strlen($aluno['observacoes']) > 24) {
+				$aluno['observacoes'] = substr($aluno['observacoes'], 0, 24).'... +';
+			}
+			$content .= '		<div class="result_field" style="width: 30%; text-align: left;">'.$aluno['observacoes'].'</div>'.PHP_EOL;
+			if ($aluno['presente']) {
+				$content .= '		<div class="result_field" style="width: 15%;">Veio</div>'.PHP_EOL;
+			} else {
+				$content .= '		<div class="result_field" style="width: 15%;">Faltou</div>'.PHP_EOL;
+			}
+			$content .= '	</div>'.PHP_EOL;
+		}
+		$content .= '</div>'.PHP_EOL;
+		return $content;
+	}
+
+	public function editChamadaAluno($turma, $aluno, $data) {
+		$content = '<br />'.PHP_EOL;
+		$content .= '<div>'.PHP_EOL;
+		$content .= '	<div><b>'.$turma->getTurma().' - '.$turma->getPeriodoExtenso()
+							.' - '.$turma->getSemestre().'o S</b></div>'.PHP_EOL;
+		$content .= '	<br />'.PHP_EOL;
+
+		$content .= '		<input type="hidden" id="idTurma" name="idTurma" value="'.$turma->getId().'"/>'.PHP_EOL;
+
+		$content .= '	<div id="alunoContainer" class="alunoContainer">'.PHP_EOL;
+		$content .= '		<input type="hidden" id="idAluno" name="idAluno" value="'.$alunos->getId().'"/>'.PHP_EOL;
+		$content .= '		<img src="/Chamada/Application/View/img/'.$alunos->getFoto().'" width="320" height="240" />'.PHP_EOL;
+		$content .= '		<div id="nomeAluno" class="formTitle"><b>'.$alunos->getNome().'</b></div>'.PHP_EOL;
+		$content .= '		<textarea id="obsAluno" class="obsAluno">'.$alunos->getObservacoes().'</textarea>'.PHP_EOL;
+		$content .= '		<img id="naoVeio" class="pointyWhenOver salvarObservacao" src="/Chamada/Application/View/img/bt_cancel.png" />'.PHP_EOL;
+		$content .= '		<img id="veio" class="pointyWhenOver salvarObservacao" src="/Chamada/Application/View/img/bt_add.png" />'.PHP_EOL;
+		$content .= '		<br />'.PHP_EOL;
+		$content .= '	</div>'.PHP_EOL;
+
+		$content .= '</div>'.PHP_EOL;
 		return $content;
 	}
 

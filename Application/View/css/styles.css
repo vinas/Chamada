@@ -135,23 +135,14 @@ input, textarea, select {
 	margin-bottom: 10px;
 }
 
-/*.subMenu #novaTurma {
-	margin-left: auto;
-	margin-right: auto;
-	background-color: #7D7D7D;
-	padding: 5px;
-	width: 40%;
-}*/
-
 .actionButton {
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #7D7D7D;
 	padding: 5px;
-	width: 40%;
+	width: 60%;
 	margin-top: 5px;
 }
-
 
 .formTitle  {
 	margin-left: auto;
@@ -159,6 +150,15 @@ input, textarea, select {
 	font-weight: bold;
 	text-align: center;
 	margin-bottom: 6px;
+	font-size: 16px;
+}
+
+.chamadaTitle  {
+	margin-left: auto;
+	margin-right: auto;
+	font-weight: bold;
+	text-align: left;
+	margin-bottom: 1px;
 	font-size: 16px;
 }
 
@@ -196,6 +196,7 @@ input, textarea, select {
 .result_field {
 	float: left;
 	margin-right: 1px;
+	min-height: 15px;
 	background-color: inherit;
 	padding-top: 3px;
 	padding-bottom: 3px;
@@ -273,4 +274,30 @@ input, textarea, select {
 #naoVeio {
 	float: left;
 	margin-left: 30%;
+}
+
+#observacoes {
+	width: 250px;
+	height: 100px;
+}
+
+.mudarData {
+	padding: 3px;
+	background-color: #7D7D7D;
+	width: 150px;
+	text-align: center;
+	color: #fff;
+}
+
+#dataChamadaTurma {
+	padding: 3px;
+	background-color: #7D7D7D;
+	width: 156px;
+	height: 25px;
+	text-align: center;
+	color: #fff;
+	font-family: Verdana;
+	font-size: 16px;
+	border-width: 0px;
+	font-weight: bold;
 }

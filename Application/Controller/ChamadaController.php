@@ -16,6 +16,7 @@ namespace Application\Controller;
 use SaSeed\View;
 use SaSeed\Session;
 use SaSeed\URLRequest;
+use SaSeed\General;
 
 use Application\Controller\Service\Turma as TurmaService;
 use Application\Controller\Service\Aluno as AlunoService;
@@ -83,6 +84,48 @@ class ChamadaController {
 			$response['response'] = 0;
 			$response['message'] = 'Erro ao dar falta';
 			$response['console'] = '['.$this->classPath.'::darFalta] - '.  $e->getMessage();
+		}
+		View::jsonEncode($response);
+	}
+
+	public function gridChamada() {
+		try {
+			$chamadaService = new ChamadaService();
+			$turmaService = new TurmaService();
+			$chamadaModel = new ChamadaModel();
+			$URLRequest = new URLRequest();
+			$params = $URLRequest->getParams();
+			if (!isset($params['data'])) {
+				$data = General::phpDate();
+			}
+			$turma = $turmaService->getById($params['key']);
+			$grid = $chamadaService->getGrid($params['key'], 'now');
+			$response['response'] = 1;
+			$response['content'] = $chamadaModel->grid($grid, $turma, $data);
+		} catch (Exception $e) {
+			$response['response'] = 0;
+			$response['message'] = 'Erro ao buscar ou montar grid.';
+			$response['console'] = '['.$this->classPath.'::gridChamada] - '.  $e->getMessage();
+		}
+		View::jsonEncode($response);
+	}
+
+	public function editChamadaAluno() {
+		try {
+			$URLRequest = new URLRequest();
+			$turmaService = new TurmaService();
+			$alunoService = new AlunoService();
+			$chamadaModel = new ChamadaModel();
+			$params = $URLRequest->getParams();
+			$aluno = $alunoService->getById($params['key']);
+			$turma = $turmaService->getById($aluno->getTurmaId());
+
+			$response['response'] = 1;
+			$response['content'] = $chamadaModel->editChamadaAluno($turma, $aluno, $params['date']);
+		} catch (Exception $e) {
+			$response['response'] = 0;
+			$response['message'] = 'Erro ao buscar aluno para editar chamada.';
+			$response['console'] = '['.$this->classPath.'::editChamadaAluno] - '.  $e->getMessage();
 		}
 		View::jsonEncode($response);
 	}

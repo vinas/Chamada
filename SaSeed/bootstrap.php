@@ -43,6 +43,7 @@
 	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/jquery.fancybox.pack.js"></script>'.PHP_EOL;
 	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/swfobject.js"></script>'.PHP_EOL;
 	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/scriptcam.js"></script>'.PHP_EOL;
+	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/jquery.maskedinput.js"></script>'.PHP_EOL;
 	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/scripts/scripts.js"></script>'.PHP_EOL;
 	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/scripts/webcam.js"></script>'.PHP_EOL;
 

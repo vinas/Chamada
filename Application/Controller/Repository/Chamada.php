@@ -67,4 +67,12 @@ class Chamada {
 			die('['.$this->classPath.'::listTurmasChamadasHoje] - '.  $e->getMessage());
 		}
 	}
+
+	public function getChamadaDataTurma($idTuma, $data) {
+		try {
+			return $this->db->getAllRows($this->table . ' AS c JOIN aluno AS a ON (c.alunoId = a.id)', 'c.alunoId, a.nome, a.observacoes, c.presente', "c.turmaId = {$idTuma} AND c.data = '".$data."'");
+		} catch (Exception $e) {
+			die('['.$this->classPath.'::getChamadaDataTurma] - '.  $e->getMessage());
+		}
+	}
 }

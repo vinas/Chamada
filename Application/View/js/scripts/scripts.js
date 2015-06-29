@@ -36,6 +36,7 @@ $(document).on("ready", function() {
 			$.displayTimedAlert($("#messageBox"), res.message, 2000);
 		}, "json");
 		$("#formNovoAluno")[0].reset();
+		$("#fotoAluno").attr("src", "");
 		return false;
 	});
 
@@ -60,11 +61,10 @@ $(document).on("ready", function() {
 
 	$(document).on("click", ".apagarAluno", function() {
 		if (confirm("Deseja realmente APAGAR o(a) aluno(a)\n" + $(this).prev().html() + "?")) {
-			alert($(this).prev().html());
-			/*$.post ("/Chamada/Alunos/apagarAluno", {id: $(this).attr("key")}, function(res) {
+			$.post ("/Chamada/Alunos/apagarAluno", {id: $(this).attr("key")}, function(res) {
 				$.displayTimedContent($("#messageBox"), res.message, 2000);
 				$.displayAnimatedContent($("#container"), res.content);
-			}, "json");*/
+			}, "json");
 		}
 	});
 
@@ -76,6 +76,34 @@ $(document).on("ready", function() {
 		$.loadToContainer("/Chamada/Chamada/fazerChamada", $(this).attr("key"));
 	});
 
+	$(document).on("click", ".editChamada", function() {
+		$.post ("/Chamada/Chamada/gridChamada", 
+		{key: $(this).attr("key")},
+		function(res) {
+			if (res.response == 0) {
+				$.displayAnimatedContent($("#messageBox"), res.message);
+			} else {
+				$.displayAnimatedContent($("#container"), res.content);
+				setTimeout(function() {
+					$("#dataChamadaTurma").mask("99/99/9999", {placeholder:"dd/mm/aaaa"});
+				}, 500);
+			}
+		}, "json");
+	});
+
+	$(document).on("click", ".editChamadaAluno", function() {
+		$.post ("/Chamada/editChamadaAluno",{
+			key: $(this).attr("key"),
+			date: $(this).attr("date")
+		}, function(res) {
+			if (res.response == 0) {
+				$.displayAnimatedContent($("#messageBox"), res.message);
+			} else {
+				$.displayAnimatedContent($("#container"), res.content);
+			}
+		}, "json");
+	});
+
 	$(document).on("click", "#alunoContainer #veio", function() {
 		$.processaPresenca();
 	});
@@ -83,6 +111,27 @@ $(document).on("ready", function() {
 	$(document).on("click", "#alunoContainer #naoVeio", function() {
 		$.processaFalta();
 	});
+
+	$(document).on("click", ".mudarData", function() {
+		$(this).hide();
+		$(".dataChamadaTurma").show();
+		$("#dataChamadaTurma").focus();
+	});
+
+	$(document).on("focusout", "#dataChamadaTurma", function() {
+		$.dataChamadaTurma();
+	});
+
+	$(document).on("keypress", "#dataChamadaTurma", function(e) {
+		if (e.keyCode == 13) {
+			$.dataChamadaTurma();
+		}
+	});
+
+	$.dataChamadaTurma = function() {
+		$(".dataChamadaTurma").hide();
+		$("#mudarData").show();
+	};
 
 	$.salvarObservacao = function(idAluno, obs) {
 		$.post ("/Chamada/Alunos/salvarObservacao", {obs: obs, idAluno: idAluno});
@@ -110,7 +159,7 @@ $(document).on("ready", function() {
 			idAluno: idAluno,
 			idTurma: idTurma
 		}, function(res) {
-			console.log(res);
+			//console.log(res);
 		}, "json");
 	};
 
@@ -119,7 +168,7 @@ $(document).on("ready", function() {
 			idAluno: idAluno,
 			idTurma: idTurma
 		}, function(res) {
-			console.log(res);
+			//console.log(res);
 		}, "json");
 	};
 
