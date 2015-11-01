@@ -10,7 +10,7 @@ $(document).on("ready", function() {
 
 	$("#listarTurmas").on("click", function() {
 		$.selectThis($(this));
-		$.loadJsonToContainer("/Chamada/Turmas/listarTurmas");
+		$.loadToContainer("/Chamada/Turmas/listarTurmas");
 	});
 
 	$(document).on("click", ".listarAlunos", function() {
@@ -45,11 +45,7 @@ $(document).on("ready", function() {
 			key = {key: key};
 		}
 		$.post (url, key, function(res) {
-			if (res.response == 0) {
-				$.displayAnimatedContent($("#messageBox"), res.message);
-			} else {
-				$.displayAnimatedContent($("#container"), res);
-			}
+			$.displayAnimatedContent($("#container"), res);
 		});
 	};
 

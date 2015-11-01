@@ -16,51 +16,22 @@
 
 	use SaSeed\URLRequest;
 
-	// Define Charset
-	header('Content-type: text/html; charset=UTF-8');
-
-	// *********************** \\
-	//	Define Basic settings  \\
-	// *********************** \\
 	require_once('Settings.php'); // (Must be the first include)
 	require_once("autoload.php");
-	require_once("GeneralFunctions.php");
 
-	// *********************** \\
-	//  Include Basic Classes
-	// *********************** \\
-	
-	require_once(AppPath.'SaSeed/Session.php');
-	
-	// Database Connection
-	if (DB_NAME) {
-		$db	= new Database();
-		$db->DBConnection(DB_DRIVER, DB_HOST, DB_NAME, DB_USER, DB_PASS);
+	// Degub
+	if (ENV == 'DEV') {
+		ini_set('display_errors', 1);
+		error_reporting(E_ALL);
+	} else {
+		ini_set('display_errors', 0);
 	}
-
-	// Define General JSs
-	$GLOBALS['general_js']	= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/jquery-2.1.1.min.js"></script>'.PHP_EOL;	// Se não houver, definir como vazio ''
-	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/jquery.fancybox.pack.js"></script>'.PHP_EOL;
-	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/swfobject.js"></script>'.PHP_EOL;
-	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/scriptcam.js"></script>'.PHP_EOL;
-	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/libs/jquery.maskedinput.js"></script>'.PHP_EOL;
-	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/scripts/scripts.js"></script>'.PHP_EOL;
-	$GLOBALS['general_js']	.= '<script type="text/javascript" src="/Chamada/Application/View/js/scripts/webcam.js"></script>'.PHP_EOL;
-
-	// Define General CSSs
-	$GLOBALS['general_css']	= '<link href="/Chamada/Application/View/css/styles.css" rel="stylesheet">'.PHP_EOL;	// Se não houver, definir como vazio ''
-	$GLOBALS['general_css']	.= '<link href="/Chamada/Application/View/css/jquery.fancybox.css" rel="stylesheet">'.PHP_EOL;
 
 	// ********************************************** \\
 	//	Load Specific Controller and Action Function  \\
 	// ********************************************** \\
-	// Define Controller, Action and Parameters
-	$URLparams = new URLRequest();
-	$GLOBALS['controller_name']	= $URLparams->getController();
-	$GLOBALS['controller']		= "\Application\Controller\\".$URLparams->getController();
-	$GLOBALS['action_function']	= $URLparams->getActionFunction();
-
-
-	// Call in Controller and Functions whithin proper environment
-	$obj = new $GLOBALS['controller'];
-	$obj->$GLOBALS['action_function']();
+	$URLRequest = new URLRequest();
+	$controller		= "\Application\Controller\\".$URLRequest->getController();
+	$actionFunction	= $URLRequest->getActionFunction();
+	$obj = new $controller;
+	$obj->$actionFunction();

@@ -15,7 +15,7 @@
 namespace Application\Controller\Service;
 
 use SaSeed\Session;
-use SaSeed\General;
+use SaSeed\Utils;
 
 class SessionService {
 
@@ -34,7 +34,7 @@ class SessionService {
 	}
 
 	public function generateSessionKey($user) {
-		return md5(General::phpDateTime() . ' - ' . $user->getId());
+		return md5(Utils::phpDateTime() . ' - ' . $user->getId());
 	}
 
 }

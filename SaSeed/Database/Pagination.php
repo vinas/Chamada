@@ -10,12 +10,17 @@
 *				Ele deve poder ser utilizado por qualquer repositório.				*
 *																					*
 * Data da criação: 23/05/2013														*
-* Versão: 1.15.0326																	*
+* Versão: 1.15.0902																*
 *************************************************************************************/
 
-namespace Application\Controller\Service\dbUtils;
+namespace SaSeed\Database;
 
-class dbFunctions {
+class Pagination {
+
+	public function teste() {
+		echo 'teste';
+		die;
+	}
 
 	/* Função pega dados dos registros e de paginação - getPage($table, $conditions, $pg_num, $max, $select_what)
 	 * @param string	- Campos a serem selecionados

@@ -13,7 +13,7 @@
 
 namespace Application\Controller;
 
-use SaSeed\View;
+use SaSeed\View\View;
 use SaSeed\Session;
 use SaSeed\URLRequest;
 
@@ -24,94 +24,83 @@ use Application\Controller\Entities\Turma as TurmaEntity;
 class TurmasController {
 
 	private $classPath = 'Application\Controller\TurmasController';
+	private $service;
+	private $params;
 
 	public function __construct() {
 		Session::start();
 		if (Session::getVar('sessionKey') == null) {
 			View::redirect('Login');
 		}
-	}
-
-	public function index() {
-		View::render('partial_turmas');
-	}
-
-	public function novaTurma() {
-		$turmaModel = new TurmaModel();
-		View::set('content', $turmaModel->turmaForm(new TurmaEntity()));
-		View::render('partial_formTurma');
-	}
-
-	public function salvarTurma() {
-		try {
-			$URLRequest = new URLRequest();
-			$turmaService = new TurmaService();
-			$turmaModel = new TurmaModel();
-			$params = $URLRequest->getParams();
-			$turma = $turmaService->salvarTurma($params);
-			$response['response'] = 1;
-			$response['message'] = $turmaModel->savedMessage($turma);
-			View::jsonEncode($response);
-		} catch (Exception $e) {
-			die('['.$this->classPath.'::salvarTurma] - '.  $e->getMessage());
-		}
-	}
-
-	public function editarTurma() {
-		try {
-			$URLRequest = new URLRequest();
-			$turmaService = new TurmaService();
-			$turmaModel = new TurmaModel();
-			$params = $URLRequest->getParams();
-			$turma = $turmaService->salvarTurma($params);
-			$response['response'] = 1;
-			$response['message'] = $turmaModel->editedMessage($turma);
-			View::jsonEncode($response);
-		} catch (Exception $e) {
-			die('['.$this->classPath.'::editarTurma] - '.  $e->getMessage());
-		}
+		$this->service = new TurmaService();
+		$this->params = new URLRequest();
 	}
 
 	public function listarTurmas() {
 		try {
-			$turmaService = new TurmaService();
-			$turmaModel = new TurmaModel();
-			$turmas = $turmaService->listarTurmas();
-			$response['response'] = 1;
-			$response['content'] = $turmaModel->listarTurmas($turmas);
-			View::jsonEncode($response);
+			View::set('turmas', $this->service->listarTurmas());
+			View::render('turmas');
 		} catch (Exception $e) {
-			die('['.$this->classPath.'::listarTurmas] - '.  $e->getMessage());
+			throw('['.$this->classPath.'::listarTurmas] - '.  $e->getMessage());
 		}
+	}
+
+	public function novaTurma() {
+		try {
+			View::set('turma', new TurmaEntity());
+			View::render('turma_form');
+		} catch (Exception $e) {
+			throw('['.$this->classPath.'::novaTurma] - '.  $e->getMessage());
+		}
+	}
+
+	public function salvarTurma() {
+		try {
+			$turma = new TurmaEntity();
+			$turma->populateMe($this->params->getParams());
+			$turma = $this->service->salvarTurma($turma);
+			View::set('turma', $turma);
+			$response['response'] = 1;
+			$response['message'] = View::renderTo('turma_salva');
+		} catch (Exception $e) {
+			throw('['.$this->classPath.'::salvarTurma] - '. $e->getMessage());
+			$response['response'] = 0;
+			$response['message'] = View::renderTo('turma_naoSalva');
+		}
+		View::renderJson($response);
 	}
 
 	public function apagarTurma() {
 		try {
-			$URLRequest = new URLRequest();
-			$turmaService = new TurmaService();
-			$turmaModel = new TurmaModel();
-			$params = $URLRequest->getParams();
-			$turma = $turmaService->getById($params['turmaId']);
-			$turmaService->apagarTurma($params['turmaId']);
-			$turmas = $turmaService->listarTurmas();
+			$params = $this->params->getParams();
+			$turma = $this->service->getById($params['turmaId']);
+			$this->service->apagarTurma($params['turmaId']);
+			View::set('turmas', $this->service->listarTurmas());
+			View::set('turma', $turma);
 			$response['response'] = 1;
-			$response['content'] = $turmaModel->listarTurmas($turmas);
-			$response['message'] = $turmaModel->deletedMessage($turma);
-			View::jsonEncode($response);
+			$response['content'] = View::renderTo('turmas');
+			$response['message'] = View::renderTo('turma_apagada');
 		} catch (Exception $e) {
-			die('['.$this->classPath.'::apagarTurma] - '.  $e->getMessage());
+			throw('['.$this->classPath.'::apagarTurma] - '.  $e->getMessage());
+			$response['response'] = 0;
+			$response['message'] = View::renderTo('turma_naoApagada');
 		}
+		View::renderJson($response);
 	}
 
 	public function abrirTurma() {
-		$URLRequest = new URLRequest();
-		$turmaService = new TurmaService();
-		$turmaModel = new TurmaModel();
-		$params = $URLRequest->getParams();
-		$turma = $turmaService->getById($params['key']);
-		$content['response'] = 1;
-		View::set('content', $turmaModel->turmaForm($turma));
-		View::render('partial_formTurma');
+		try {
+			$params = $this->params->getParams();
+			View::set(
+				'turma',
+				$this->service->getById(
+					$params['key']
+				)
+			);
+			View::render('turma_form');
+		} catch (Exception $e) {
+			throw('['.$this->classPath.'::abrirTurma] - '.  $e->getMessage());
+		}
 	}
 
 }

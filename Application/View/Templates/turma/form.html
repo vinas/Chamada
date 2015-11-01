@@ -1,0 +1,40 @@
+<br />
+<div>
+<?php if ($turma->getId() > 0) { ?>
+	<form id="formEditaTurma">
+		<input type="hidden" name="id" id="id" value="<?php echo $turma->getId(); ?>" />
+		<div class="formTitle">Editar turma</div>
+<?php } else { ?>
+	<form id="formNovaTurma">
+		<div class="formTitle">Nova turma</div>
+<?php } ?>
+		<label for="turma">Turma:</label><input type="text" name="turma" id="turma" value="<?php echo $turma->getTurma(); ?>" /><br />
+		<label for="semestre">Semestre:</label>
+		<select name="semestre" id="semestre">
+			<option value="1" <?php echo ($turma->getSemestre() == 1) ? 'selected="selected"' : ''; ?>>1</option>
+			<option value="2" <?php echo ($turma->getSemestre() == 2) ? 'selected="selected"' : ''; ?>>2</option>
+			<option value="3" <?php echo ($turma->getSemestre() == 3) ? 'selected="selected"' : ''; ?>>3</option>
+			<option value="4" <?php echo ($turma->getSemestre() == 4) ? 'selected="selected"' : ''; ?>>4</option>
+			<option value="5" <?php echo ($turma->getSemestre() == 5) ? 'selected="selected"' : ''; ?>>5</option>
+			<option value="6" <?php echo ($turma->getSemestre() == 6) ? 'selected="selected"' : ''; ?>>6</option>
+			<option value="7" <?php echo ($turma->getSemestre() == 7) ? 'selected="selected"' : ''; ?>>7</option>
+			<option value="8" <?php echo ($turma->getSemestre() == 8) ? 'selected="selected"' : ''; ?>>8</option>
+		</select>
+		<br />
+		<label for="periodo">Periodo:</label>
+		<select name="periodo" id="periodo">
+			<option value="1" <?php echo ($turma->getPeriodo() == 1) ? 'selected="selected"' : ''; ?>>Diurno</option>
+			<option value="2" <?php echo ($turma->getPeriodo() == 2) ? 'selected="selected"' : ''; ?>>Noturno</option>
+		</select>
+		<br /><br /><br /><br />
+		<div class="formButtons">
+			<img id="submit" class="pointyWhenOver" src="/Chamada/Application/View/img/bt_add.png" />
+		</div>
+	</form>
+</div>
+<?php if ($turma->getId() > 0) { ?>
+	<div class="subContent" id="subContent">
+		<div class="pointyWhenOver listarAlunos actionButton" key="<?php echo $turma->getId(); ?>"><b>&bull; Listar Alunos &bull;</b></div>
+		<div class="pointyWhenOver actionButton addAluno" key="<?php echo $turma->getId(); ?>"><b>&bull; Novo Aluno &bull;</b></div>
+	</div>
+<?php } ?>

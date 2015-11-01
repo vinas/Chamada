@@ -1,7 +1,7 @@
 <?php
 /************************************************************************************
 * Name:				Chamada Controller												*
-* File:				Application\Controller\ChamadaController.php						*
+* File:				Application\Controller\ChamadaController.php					*
 * Author(s):		Vinas de Andrade												*
 *																					*
 * Description: 		This is the Chamada's controller.								*
@@ -13,10 +13,10 @@
 
 namespace Application\Controller;
 
-use SaSeed\View;
+use SaSeed\View\View;
 use SaSeed\Session;
 use SaSeed\URLRequest;
-use SaSeed\General;
+use SaSeed\Utils;
 
 use Application\Controller\Service\Turma as TurmaService;
 use Application\Controller\Service\Aluno as AlunoService;
@@ -26,30 +26,31 @@ use Application\Model\Chamada as ChamadaModel;
 class ChamadaController {
 
 	private $classPath = 'Application\Controller\TurmasController';
+	private $turmaService;
+	private $urlRequest;
 
 	public function __construct() {
 		Session::start();
 		if (Session::getVar('sessionKey') == null) {
 			View::redirect('Login');
 		}
+		$this->turmaService = new TurmaService();
+		$this->urlRequest = new URLRequest();
 	}
 
 	public function index() {
-		$turmaService = new TurmaService();
 		$chamadaModel = new ChamadaModel();
-		$turmas = $turmaService->listarTurmas();
-		$turmasHoje = $turmaService->listTurmasChamadasHoje();
+		$turmas = $this->turmaService->listarTurmas();
+		$turmasHoje = $this->turmaService->listTurmasChamadasHoje();
 		View::set('content', $chamadaModel->home($turmas, $turmasHoje));
 		View::render('partial_chamadaHome');
 	}
 
 	public function fazerChamada() {
-		$URLRequest = new URLRequest();
-		$turmaService = new TurmaService();
 		$alunoService = new AlunoService();
 		$chamadaModel = new ChamadaModel();
-		$params = $URLRequest->getParams();
-		$turma = $turmaService->getById($params['key']);
+		$params = $this->urlRequest->getParams();
+		$turma = $this->turmaService->getById($params['key']);
 		$alunos = $alunoService->getPrimeirosDoisAlunosByTurmaId($params['key']);
 		$listaAlunos = $alunoService->getAlunosIdsByTurmaId($params['key']);
 		View::set('content', $chamadaModel->chamada($turma, $alunos, $listaAlunos));
@@ -58,9 +59,8 @@ class ChamadaController {
 
 	public function darPresenca() {
 		try {
-			$URLRequest = new URLRequest();
 			$chamadaService = new ChamadaService();
-			$params = $URLRequest->getParams();
+			$params = $this->urlRequest->getParams();
 			$chamadaService->darPresenca($params['idTurma'], $params['idAluno']);
 			$response['response'] = 1;
 			$response['message'] = '1';
@@ -74,9 +74,8 @@ class ChamadaController {
 
 	public function darFalta() {
 		try {
-			$URLRequest = new URLRequest();
 			$chamadaService = new ChamadaService();
-			$params = $URLRequest->getParams();
+			$params = $this->urlRequest->getParams();
 			$chamadaService->darFalta($params['idTurma'], $params['idAluno']);
 			$response['response'] = 1;
 			$response['message'] = '1';
@@ -91,14 +90,12 @@ class ChamadaController {
 	public function gridChamada() {
 		try {
 			$chamadaService = new ChamadaService();
-			$turmaService = new TurmaService();
 			$chamadaModel = new ChamadaModel();
-			$URLRequest = new URLRequest();
-			$params = $URLRequest->getParams();
+			$params = $this->urlRequest->getParams();
 			if (!isset($params['data'])) {
-				$data = General::phpDate();
+				$data = Utils::phpDate();
 			}
-			$turma = $turmaService->getById($params['key']);
+			$turma = $this->turmaService->getById($params['key']);
 			$grid = $chamadaService->getGrid($params['key'], 'now');
 			$response['response'] = 1;
 			$response['content'] = $chamadaModel->grid($grid, $turma, $data);
@@ -112,13 +109,11 @@ class ChamadaController {
 
 	public function editChamadaAluno() {
 		try {
-			$URLRequest = new URLRequest();
-			$turmaService = new TurmaService();
 			$alunoService = new AlunoService();
 			$chamadaModel = new ChamadaModel();
-			$params = $URLRequest->getParams();
+			$params = $this->urlRequest->getParams();
 			$aluno = $alunoService->getById($params['key']);
-			$turma = $turmaService->getById($aluno->getTurmaId());
+			$turma = $this->turmaService->getById($aluno->getTurmaId());
 
 			$response['response'] = 1;
 			$response['content'] = $chamadaModel->editChamadaAluno($turma, $aluno, $params['date']);

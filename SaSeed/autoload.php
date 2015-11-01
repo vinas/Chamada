@@ -17,7 +17,6 @@ function _appautoload_($name) {
 	$searchpath		= explode('\\', $name);
 	$name			= array_pop( $searchpath );
 	$searchpath		= $pathinfo['dirname'].DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR,$searchpath).DIRECTORY_SEPARATOR;
-	//echo "{$searchpath}{$name}.php<br>";
 	if (file_exists("{$searchpath}{$name}.php")) {
         require_once("{$searchpath}{$name}.php");
 	}

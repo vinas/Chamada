@@ -95,34 +95,4 @@ class Turma {
 		return $content;
 	}
 
-	public function listarTurmas($turmas) {
-		$content = '<div class="subMenu">'.PHP_EOL;
-		$content .= '	<div class="pointyWhenOver actionButton" id="novaTurma"><b>+ Adicionar Nova turma</b></div>'.PHP_EOL;
-		$content .= '</div>'.PHP_EOL;
-		if (count($turmas) > 0) {
-			$content .= $this->resultHeader();
-			$content .= '<div class="result_body">'.PHP_EOL;
-			foreach ($turmas as $turma) {
-				$content .= '	<div class="return_row new">'.PHP_EOL;
-				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 35%;">'.$turma->getTurma().'</div>'.PHP_EOL;
-				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 15%; text-align: center;">'.$turma->getSemestre().'</div>'.PHP_EOL;
-				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 33%;">'.$turma->getPeriodoExtenso().'</div>'.PHP_EOL;
-				$content .= '		<div class="result_field abrirTurma" key="'.$turma->getId().'" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Detalhes</div>'.PHP_EOL;
-				$content .= '	</div>'.PHP_EOL;
-			}
-			$content .= '</div>'.PHP_EOL;
-		}
-		return $content;
-	}
-
-	private	function resultHeader() {
-		$content	= '<div class="result_header">'.PHP_EOL;
-		$content	.= '	<div class="result_header_field" style="width: 35%; text-align: center;">Turma</div>'.PHP_EOL;
-		$content	.= '	<div class="result_header_field" style="width: 15%; text-align: center;">Semestre</div>'.PHP_EOL;
-		$content	.= '	<div class="result_header_field" style="width: 33%; text-align: center;">Periodo</div>'.PHP_EOL;
-		$content	.= '	<div class="result_header_field" style="width: 15%; text-align: center;">&nbsp;</div>'.PHP_EOL;
-		$content	.= '</div>'.PHP_EOL;
-		return $content;
-	}
-
 }

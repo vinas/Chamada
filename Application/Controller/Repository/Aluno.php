@@ -13,14 +13,14 @@
 
 namespace Application\Controller\Repository;
 
-class Aluno {
+class Aluno extends Utils\General {
 
 	private $db;
 	private $table = 'aluno';
 	private $classPath = 'Application\Controller\Repository\Turma';
 
 	public function __construct() {
-		$this->db = $GLOBALS['db'];
+		$this->db = $this->setDatabase();
 	}
 
 	public function getById($alunoId = false) {

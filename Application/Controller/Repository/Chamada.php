@@ -14,16 +14,16 @@
 
 namespace Application\Controller\Repository;
 
-use SaSeed\General;
+use SaSeed\Utils;
 
-class Chamada {
+class Chamada extends Utils\General {
 
 	private $db;
 	private $table = 'chamada';
 	private $classPath = 'Application\Controller\Repository\Chamada';
 
 	public function __construct() {
-		$this->db = $GLOBALS['db'];
+		$this->db = $this->setDatabase();
 	}
 
 	public function saveNewPresenca($idTuma, $idAluno) {
@@ -34,7 +34,7 @@ class Chamada {
 					$idTuma,
 					$idAluno,
 					true,
-					General::mySqlDate()
+					Utils::mySqlDate()
 				)
 			);
 			return true;
@@ -51,7 +51,7 @@ class Chamada {
 					$idTuma,
 					$idAluno,
 					false,
-					General::mySqlDate()
+					Utils::mySqlDate()
 				)
 			);
 			return true;
@@ -62,7 +62,7 @@ class Chamada {
 
 	public function listTurmasChamadasHoje() {
 		try {
-			return $this->db->getAllRows($this->table, 'turmaId', "1 AND data = '".General::mySqlDate()."' GROUP BY turmaId");
+			return $this->db->getAllRows($this->table, 'turmaId', "1 AND data = '".Utils::mySqlDate()."' GROUP BY turmaId");
 		} catch (Exception $e) {
 			die('['.$this->classPath.'::listTurmasChamadasHoje] - '.  $e->getMessage());
 		}

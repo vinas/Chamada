@@ -13,7 +13,7 @@
 
 namespace Application\Controller;
 
-use SaSeed\View;
+use SaSeed\View\View;
 use SaSeed\Session;
 use Application\Controller\Service\User as UserService;
 use Application\Model\Index as ModIndex;
@@ -25,7 +25,6 @@ class IndexController {
 		if (Session::getVar('sessionKey') == null) {
 			View::redirect('Login');
 		}
-		View::set('js', '<script type="text/javascript" src="/Chamada/Application/View/js/scripts/navigation.js"></script>');
 	}
 
 	/*
@@ -33,10 +32,6 @@ class IndexController {
 		@return format	- print
 	*/
 	public static function index() {
-		$ModIndex	= new ModIndex();
-		$data		= '';
-		$content	= $ModIndex->modelate($data);
-		View::set('content', $content);
 		View::render('index');
 	}
 

@@ -26,11 +26,13 @@ class Turma {
 	}
 
 	public function getById($turmaId) {
-		return $this->validateObject($this->turmaRepository->getById($turmaId));
+		if ($turmaId) {
+			return $this->turmaRepository->getById($turmaId);
+		}
+		throw new \Exception("ID da Turma nao enviado");
 	}
 
 	public function salvarTurma($turma) {
-		$turma = $this->validateObject($turma);
 		if ($turma->getId() > 0) {
 			$this->turmaRepository->updateTurma($turma);
 		} else {
@@ -40,16 +42,7 @@ class Turma {
 	}
 
 	public function listarTurmas() {
-		$turmas = $this->turmaRepository->listAll();
-		for ($i = 0; $i < count($turmas); $i++) {
-			$turmas[$i] = $this->validateObject($turmas[$i]);
-		}
-		return $turmas;
-	}
-
-	public function listTurmasChamadasHoje() {
-		$chamadaRepository = new ChamadaRepository();
-		return $chamadaRepository->listTurmasChamadasHoje();
+		return $this->turmaRepository->listAll();
 	}
 
 	public function apagarTurma($turmaId) {
@@ -58,13 +51,9 @@ class Turma {
 		return $this->turmaRepository->deleteTurmaById($turmaId);
 	}
 
-	private function validateObject($turmaArray) {
-		if (!is_object($turmaArray)) {
-			$turma = new TurmaEntity();
-			$turma = $turma->populateEntity($turmaArray);
-			return $turma;
-		}
-		return $turmaArray;
-	}
+	/*public function listTurmasChamadasHoje() {
+		$chamadaRepository = new ChamadaRepository();
+		return $chamadaRepository->listTurmasChamadasHoje();
+	}*/
 
 }

@@ -1,19 +1,5 @@
 $(document).on("ready", function() {
 
-	$("#LogMeIn").on("click", function() {
-		$.postLogin();
-		return false;
-	});
-
-	$(document).on("submit", "#loginForm", function() {
-		$.postLogin();
-		return false;
-	});
-
-	$(document).on("keypress", "#password", function(e) {
-		if (e.charCode == 13) $.postLogin();
-	});
-
 	$(document).on("submit", "#formNovaTurma", function() {
 		$.post ("/Chamada/Turmas/salvarTurma", $(this).serialize(), function(res) {
 			$.displayTimedAlert($("#messageBox"), res.message, 2000);
@@ -23,7 +9,7 @@ $(document).on("ready", function() {
 	});
 
 	$(document).on("submit", "#formEditaTurma", function() {
-		$.post ("/Chamada/Turmas/editarTurma", $(this).serialize(), function(res) {
+		$.post ("/Chamada/Turmas/salvarTurma", $(this).serialize(), function(res) {
 			$.displayTimedAlert($("#messageBox"), res.message, 3000);
 			$("#listarTurmas").click();
 		}, "json");
@@ -264,16 +250,6 @@ $(document).on("ready", function() {
 		} else {
 			$("#pilhaTurma").val(pilha.substring(pos + 1));
 		}
-	};
-
-	$.postLogin = function() {
-		$.post ("/Chamada/Login/in", $("#loginForm").serialize(), function(res) {
-			if (res.response == 0) {
-				$.displayTimedErrorMsg(res.message+"<br /><br />");
-			} else {
-				window.location.replace(res.url);
-			}
-		}, "json");
 	};
 
 	$.displayTimedErrorMsg = function(message) {

@@ -1,13 +1,17 @@
+<?php
+	use SaSeed\View\View;
+?>
 <html>
 <head>
     <link rel="icon" href="/Chamada/Application/View/img/favicon.ico" type="image/x-icon" />
 	<title>Chamada</title>
 
-    <?php
-    	echo $GLOBALS['general_js'];
-    	echo $GLOBALS['general_css'];
-    	echo $css;
-    ?>
+	<?php
+		View::$JSHandler->declareGeneralJSLibs();
+		View::$JSHandler->declareGeneralJS();
+		View::$JSHandler->declareSpecificJS("login_login");
+		View::$CSSHandler->declareGeneralCSS();
+	?>
 
 </head>
 

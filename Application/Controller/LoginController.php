@@ -13,7 +13,7 @@
 
 namespace Application\Controller;
 
-use SaSeed\View;
+use SaSeed\View\View;
 use SaSeed\Session;
 use SaSeed\URLRequest;
 
@@ -24,7 +24,7 @@ use Application\Model\Index as ModIndex;
 class LoginController {
 
 	public static function index() {
-		View::set('css', '<link href="/Chamada/Application/View/css/login.css" rel="stylesheet">');
+		//View::set('css',  '<link href="/Chamada/Application/View/css/login.css" rel="stylesheet">');
 		View::render('login');
 	}
 

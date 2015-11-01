@@ -60,7 +60,7 @@ class Turma {
 		return $this->periodoExtenso;
 	}
 
-	public function populateEntity($array) {
+	public function populateMe($array) {
 		try {
 			$this->setId((isset($array['id'])) ? $array['id'] : false);
 			$this->setTurma((isset($array['turma'])) ? $array['turma'] : false);

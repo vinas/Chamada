@@ -14,7 +14,7 @@
 
 namespace Application\Controller\Service;
 
-use SaSeed\General;
+use SaSeed\Utils;
 
 use Application\Controller\Repository\Chamada as ChamadaRepository;
 
@@ -36,9 +36,9 @@ class Chamada {
 
 	public function getGrid($idTurma, $data = false) {
 		if (!$data) {
-			$data = General::phpDate();
+			$data = Utils::phpDate();
 		}
-		return $this->chamadaRepository->getChamadaDataTurma($idTurma, General::mySqlNonUsDate($data));
+		return $this->chamadaRepository->getChamadaDataTurma($idTurma, Utils::mySqlNonUsDate($data));
 		return false;
 	}
 

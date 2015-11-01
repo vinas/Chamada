@@ -9,11 +9,13 @@
 *					to work wit mysql only.											*
 *																					*
 * Creation Date:	16/04/2015														*
-* Version:			1.15.0416														*
+* Version:			1.15.0419														*
 * License:			http://www.opensource.org/licenses/bsd-license.php BSD			*
 *************************************************************************************/
 
-namespace SaSeed;
+namespace SaSeed\Database;
+
+use \PDO;
 
 class Database {
 
@@ -35,7 +37,7 @@ class Database {
 			$this->setConnectionAttributes();
 			return $this->connection;
 		} catch (PDOException $e) {
-			die('['.$classPath.'::DBConnection] - '.  $e->getMessage());
+			throw('['.$classPath.'::DBConnection] - '.  $e->getMessage());
 		}
 		return false;
 	}
@@ -47,12 +49,38 @@ class Database {
 	// ********** \\
 
 	private function runQuery($query) {
-		$stmt = $this->connection->query($query);
+		return $this->connection->query($query);
+	}
+
+	/* Pega linha de resultado como um array associativo
+	 * @param  string  - A query
+	 * @return array */
+	private function fetch($stmt) {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
-	public function lastId() {
+	/* Pega linha de resultado como array numérico
+	 * @param  string - A query
+	 * @return array */
+	private function numericFetch($query) {
+		return $stmt->fetchAll(PDO::FETCH_NUM);
 	}
+
+	/* Pega linha de resultado como um objeto
+	 * @param  string - A query
+	 * @return array */
+	private function objfetch($query) {
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	private function bothfetch($query) {
+		return $stmt->fetchAll(PDO::FETCH_BOTH);
+	}
+
+	public function lastId() {
+		return $this->connection->lastInsertId();
+	}
+
 
 	// *** Funções CRUD pré-preparadas ***
 
@@ -66,45 +94,15 @@ class Database {
 	 * @param integer	- Máximo de registros (paginação)
 	 *
 	 * @return mixed */
-	public function getAllRows($table, $limit = 0, $max = 0, $selectWhat = '*', $conditions = '1') {
+	public function getAllRows($table, $selectWhat = '*', $conditions = '1', $limit = false, $max = false) {
 		$query = 'SELECT '.$selectWhat.' FROM '.$table.' WHERE '.$conditions;
-		if (($max != 0) && ($limit != 0)) {
-			$query .= ' LIMIT '.$limit.', '.$max;
-		}
-		return $this->runQuery($query);
-	}
-
-	/* Pega vários registros de uma tabela podendo-se usar condições, selecionar campos,
-	   e definir a paginação. Retorna um array
-	 *
-	 * @param string	- Tabela origem dos dados
-	 * @param string	- Condições
-	 * @param string	- Que campos pegar (mto útil ao se usar JOINs)
-	 * @param integer	- Regsitro de início (paginação)
-	 * @param integer	- Máximo de registros (paginação)
-	 *
-	 * @return array 	- $rows[contador][campo] */
-	public function getAllRows_Arr($table, $selectWhat = '*', $conditions = '1', $limit = 0, $max = 0) {
-		$rows = '';
-		$query = 'SELECT '.$selectWhat.' FROM '.$table.' WHERE '.$conditions;
-		if (($max != 0) && ($limit != 0)) {
-			$query .= ' LIMIT '.$limit.', '.$max;
-		}
-		// Executa a pesquisa
-		$res = $this->runQuery($query);
-		$contador = 0;
-		while ($row = $this->fetch($res)) {
-			$totFields = count($row);
-			for ($i = 0; $i < $totFields; $i++) {
-				$key[] = key($row);
-				next($row);
+		if ($limit) {
+			$query .= ' LIMIT '.$limit;
+			if ($max) {
+				$query .= ', '.$max;
 			}
-			foreach ($key as $value) {
-				$rows[$contador][$value] = $row[$value];
-			}
-			$contador++;
 		}
-		return $rows;
+		return $this->fetch($this->runQuery($query));
 	}
 
 	/* Pega um único registro podendo-se utilizar condições e selecionar os campos
@@ -116,9 +114,8 @@ class Database {
 	 * @return mixed */
 	public function getRow($table, $selectWhat = '*', $conditions = '1') {
 		$query = 'SELECT '.$selectWhat.' FROM '.$table.' WHERE '.$conditions;
-		$res = $this->runQuery($query);
-		$row = $this->fetch($res);
-		return $row;
+		$result = $this->fetch($this->runQuery($query));
+		return (count($result) > 0) ? $result[0] :  false;
 	}
 
 	/* Atualiza ou mais registros (apenas uma condição)
@@ -157,48 +154,53 @@ class Database {
 	}
 
 	public function deleteRow($table = '', $condition = '') {
-		$return $this->runQuery('DELETE FROM '.$table.' WHERE '.$condition);
-		return $res;
+		return $this->runQuery('DELETE FROM '.$table.' WHERE '.$condition);
 	}
 
 	public function insertRow($table, $values, $fields = '') {
-		$query = 'INSERT INTO '.$table.' (';
-		if ($fields == '') {
-			$fields = $this->listFields_noid($table);
-			for ($i = 0; $i < count($fields); $i++) {
-				if ($i > 0) {
-					$query .= ', ';
+		try {
+			$query = 'INSERT INTO '.$table.' (';
+			if ($fields == '') {
+				$fields = $this->listFields_noid($table);
+				for ($i = 0; $i < count($fields); $i++) {
+					if ($i > 0) {
+						$query .= ', ';
+					}
+					$query .= $fields[$i];
 				}
-				$query .= $fields[$i];
-			}
-		} else {
-			for ($i = 0; $i < count($fields); $i++) {
-				if ($i > 0) {
-					$query .= ', ';
-				}
-				$query .= $fields[$i];
-			}
-		}
-		$query .= ') VALUES (';
-		for ($i = 0; $i < count($values); $i++) {
-			if ($i != 0) {
-				$query .= ', ';
-			}
-
-			if (is_int($values[$i])) {
-				$query .= $values[$i];
-			} else if (gettype($values[$i]) == 'object') {
-				foreach ($values[$i] as $variavel) {
-						$valor = $variavel;
-						break;
-				}
-				$query .= "'".$valor."'";
 			} else {
-				$query .= "'".$this->stringEscape($values[$i])."'";
+				for ($i = 0; $i < count($fields); $i++) {
+					if ($i > 0) {
+						$query .= ', ';
+					}
+					$query .= $fields[$i];
+				}
 			}
+			$query .= ') VALUES (';
+			for ($i = 0; $i < count($values); $i++) {
+				if ($i != 0) {
+					$query .= ', ';
+				}
+
+				if (is_int($values[$i])) {
+					$query .= $values[$i];
+				} else if (gettype($values[$i]) == 'object') {
+					foreach ($values[$i] as $variavel) {
+							$valor = $variavel;
+							break;
+					}
+					$query .= "'".$valor."'";
+				} else {
+					$query .= "'".$values[$i]."'";
+				}
+			}
+			$query .= ')';
+			$this->runQuery($query);
+		} catch (PDOException $e) {
+			die('['.$classPath.'::DBConnection] - '.  $e->getMessage());
+		} catch (Exception $e) {
+			die('['.$classPath.'::DBConnection] - '.  $e->getMessage());
 		}
-		$query .= ')';
-		return $this->runQuery($query);
 	}
 
 	// ** FUNÇÕES AUXILIARES ** \\
@@ -209,11 +211,12 @@ class Database {
 	 * @return array */
 	public function listFields($table) {
 		$query = 'SHOW COLUMNS FROM '.$table;
-		$res = $this->runQuery($query);
-		while ($row = $this->fetch($res)) {
+		$rows = $this->fetch($this->runQuery($query));
+		foreach ($rows as $row) {
 			$fields[] = $row['Field'];
 		}
 		return $fields;
+
 	}
 
 	/* Retorna os nomes dos campos de uma tabela (menos campo ID)
@@ -222,12 +225,11 @@ class Database {
 	public function listFields_noid($table) {
 		$contador = 0;
 		$query = 'SHOW COLUMNS FROM '.$table;
-		$res = $this->runQuery($query);
-		while ($row = $this->fetch($res)) {
-			if ($contador != 0) {
+		$rows = $this->fetch($this->runQuery($query));
+		foreach ($rows as $row) {
+			if ($row['Field'] != 'id') {
 				$fields[] = $row['Field'];
 			}
-			$contador++;
 		}
 		return $fields;
 	}
@@ -237,12 +239,13 @@ class Database {
 	 * @return integer */
 	public function numFields($table) {
 		$query = 'DESCRIBE '.$table;
-		$res = $this->runQuery($query);
-		$value = $this->numRows($res);
-		return $res;
+		$res = $this->fetch($this->runQuery($query));
+		return count($res);
 	}
 
-	/* Retorna o número de linhas de uma query já executada
+	/* DEPRECATED AFTER VERSION 1.15.0417
+	 *
+	 * Retorna o número de linhas de uma query já executada
 	 * @param  string - O resultado da query.
 	 * @return integer */
 	public function numRows($result) {
@@ -252,7 +255,7 @@ class Database {
 	/* Retorna o número de linhas afetadas pela última query
 	 * @return integer */
 	public function affectedRows() {
-		return mysql_affected_rows($this->lastConnection);
+		return $this->connection->rowCount();
 	}
 
 	/* Retorna o número total de queries executadas. (Vai geralmente no fim do script)
@@ -283,7 +286,9 @@ class Database {
 		}
 	}
 
-	/* Trata um valor para ser usado com segurança em queries
+	/* DEPRECATED ON FROM VERSION 1.15.0417
+	 *
+	 * Trata um valor para ser usado com segurança em queries
 	 * @param  string  - String a ser tratada
 	 * @param  bool    - Caso tratar '%' e '_' seja preciso
 	 * @return string */
@@ -297,43 +302,13 @@ class Database {
 		}
 	}
 
-	/* Limpa o resultado
+	/* DEPRECATED ON FROM VERSION 1.15.0417
+	 *
+	 * Limpa o resultado
 	 * @param  string  - O resultado a ser limpo ($result)
 	 * @return boolean */
 	public function freeResult($result) {
 		return mysql_free_result($result);
-	}
-
-	/* Retorna a mensagem de erro do MySQL
-	 * @return string */
-	public function error() {
-		$this->error = (is_null($this->lastConnection)) ? '' : mysql_error($this->lastConnection);
-		return $this->error;
-	}
-
-	/* Retorna o número do erro MySQL
-	 * @return string */
-	public function errorNumber() {
-		$this->errorNumber = (is_null($this->lastConnection)) ? 0 : mysql_errno($this->lastConnection);
-		return $this->errorNumber;
-	}
-
-	/* Se um erro de BD acontecer, o script vai ser parado e uma mensagem de erro exibida
-	 * @param  string  - A mensagem de erro. Se vazia, será criada como $this->sql.
-	 * @return string */
-	private function displayErrors($errorMessage='') {
-		if ($this->lastConnection) {
-			$this->error = $this->error($this->lastConnection);
-			$this->errorNumber = $this->errorNumber($this->lastConnection);
-		}
-		if (!$errorMessage) {
-			$errorMessage = '- Erro na query: '.$this->msql;
-		}
-		$message = ''.$errorMessage.'<br />
-		'.(($this->errorNumber != '') ? '- Error: '.$this->error.' (Error #'.$this->errorNumber.')<br />' : '').'
-		- File: '.$_SERVER['SCRIPT_FILENAME'].'<br />';
-		die('Erro de Banco de Dados, favor tentar novamente mais tarde.<br />'.$message.'');
-		//die('Erro de Banco de Dados:<br /><br />Um erro ocorreu na pesquisa, a mesma estava vazia ou era invalida.<br />Favor tentar novamente mais tarde.<br /><br />- debug: dbfc.displayErrors');
 	}
 
 	/* This is called when a database connection is created.

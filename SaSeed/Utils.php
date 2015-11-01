@@ -1,7 +1,7 @@
 <?php
 /************************************************************************************
-* Name:				General Functions												*
-* File:				Application\FramworkCore\GeneralFunctions.php 					*
+* Name:				Utils															*
+* File:				Application\FramworkCore\Utils.php 								*
 * Author(s):		Vinas de Andrade, Raphael Pawlik e Leandro Menezes				*
 *																					*
 * Description: 		This file holds basic functions called by different files		*
@@ -14,7 +14,7 @@
 
 namespace SaSeed;
 
-class General {
+class Utils {
 	
 	public static function objectToArray ($d) {
 		if (is_object($d)) {

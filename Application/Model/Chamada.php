@@ -13,8 +13,6 @@
 
 namespace Application\Model;
 
-use SaSeed\General;
-
 class Chamada {
 
 	private $classPath = 'Application\Model\Chamada';

@@ -1,27 +1,29 @@
+<?php
+	use SaSeed\View\View;
+?>
 <html>
 <head>
     <link rel="icon" href="/Chamada/Application/View/img/favicon.ico" type="image/x-icon" />
 	<title>Chamada</title>
 
-    <?php
-    	echo $GLOBALS['general_js'];
-    	echo $js;
-    	echo $GLOBALS['general_css'];
-    ?>
+	<?php
+		View::$JSHandler->declareGeneralJSLibs();
+		View::$JSHandler->declareGeneralJS();
+		View::$CSSHandler->declareGeneralCSS();
+	?>
 
 </head>
 
 <body width="100%" style="width: 100%;" topmargin="0" leftmargin="0">
 
 	<div id="mainMenu">
-		<?php \SaSeed\View::render('partial_menu'); ?>
+		<?php View::appendTemplate('menu'); ?>
 	</div>
 	
 	<div id="messageBox"></div>
 	<br />
 
 	<div id="container">
-		<?php echo $content; ?>
 	</div>
 
 </body>

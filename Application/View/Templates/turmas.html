@@ -1,0 +1,21 @@
+<?php
+	use SaSeed\View\View;
+?>
+<div class="subMenu">
+	<div class="pointyWhenOver actionButton" id="novaTurma"><b>+ Adicionar Nova turma</b></div>
+</div>
+<div class="result_body">
+<?php
+	if (count($turmas) > 0) {
+		View::appendTemplate('turma_resultHeader');
+		foreach ($turmas as $turma) {
+			?><div class="return_row new">
+				<div class="result_field abrirTurma" key="<?php echo $turma->getId(); ?>" style="width: 35%;"><?php echo $turma->getTurma(); ?></div>
+				<div class="result_field abrirTurma" key="<?php echo $turma->getId(); ?>" style="width: 15%; text-align: center;"><?php echo $turma->getSemestre(); ?></div>
+				<div class="result_field abrirTurma" key="<?php echo $turma->getId(); ?>" style="width: 33%;"><?php echo $turma->getPeriodoExtenso(); ?></div>
+				<div class="result_field abrirTurma" key="<?php echo $turma->getId(); ?>" style="width: 15%; text-align: center;"><img src="/Chamada/Application/View/img/notepad.gif" width="12" height="12" />Detalhes</div>
+			</div><?php
+		}
+	}
+?>
+</div>

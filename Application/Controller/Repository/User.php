@@ -14,21 +14,21 @@
 
 namespace Application\Controller\Repository;
 
-class User {
+class User extends \SaSeed\Database\DAO {
 
 	private $db;
 	private $table = 'user';
 	private $classPath = 'Application\Controller\Repository\User';
 
 	public function __construct() {
-		$this->db = $GLOBALS['db'];
+		$this->db = self::setDatabase('localhost');
 	}
 
 	public function getById($userId = false) {
 		try {
 			return $this->db->getRow($this->table, '*', "id = {$userId}");
 		} catch (Exception $e) {
-			die('['.$classPath.'::getById] - '.  $e->getMessage());
+			throw('['.$classPath.'::getById] - '.  $e->getMessage());
 		}
 	}
 
@@ -36,7 +36,7 @@ class User {
 		try {
 			return $this->db->getRow($this->table, '*', "email = '{$email}'");
 		} catch (Exception $e) {
-			die('['.$classPath.'::getByEmail] - '.  $e->getMessage());
+			throw('['.$classPath.'::getByEmail] - '.  $e->getMessage());
 		}
 	}
 
@@ -53,7 +53,7 @@ class User {
 			);
 			return $this->db->lastId();
 		} catch (Exception $e) {
-			die('['.$classPath.'::saveNewUser] - '.  $e->getMessage());
+			throw('['.$classPath.'::saveNewUser] - '.  $e->getMessage());
 		}
 	}
 
@@ -80,7 +80,7 @@ class User {
 			);
 			return true;
 		} catch (Exception $e) {
-			die('['.$classPath.'::updateUser] - '.  $e->getMessage());
+			throw('['.$classPath.'::updateUser] - '.  $e->getMessage());
 		}
 		return false;
 	}
@@ -89,7 +89,7 @@ class User {
 		try {
 			return $this->deleteUserById($user->getId());
 		} catch (Exception $e) {
-			die('['.$classPath.'::deleteUser] - '.  $e->getMessage());
+			throw('['.$classPath.'::deleteUser] - '.  $e->getMessage());
 		}
 	}
 
@@ -97,7 +97,7 @@ class User {
 		try {
 			return $this->db->deleteRow($this->table, " id = " . $userId);
 		} catch (Exception $e) {
-			die('['.$classPath.'::deleteUserById] - '.  $e->getMessage());
+			throw('['.$classPath.'::deleteUserById] - '.  $e->getMessage());
 		}
 	}
 
@@ -105,7 +105,7 @@ class User {
 		try {
 			return $this->db->getRow($this->table, '*', "active = 1 AND user = '{$user}' AND password = '{$password}'");
 		} catch (Exception $e) {
-			die('['.$classPath.'::findUserByLogin] - '.  $e->getMessage());
+			throw('['.$classPath.'::findUserByLogin] - '.  $e->getMessage());
 		}
 	}
 }

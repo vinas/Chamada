@@ -14,33 +14,45 @@
 
 namespace Application\Controller\Repository;
 
-class Turma {
+use Application\Controller\Entities\Turma as TurmaEntity;
+
+class Turma extends \SaSeed\Database\DAO {
 
 	private $db;
 	private $table = 'turma';
 	private $classPath = 'Application\Controller\Repository\Turma';
+	private $turma;
 
 	public function __construct() {
-		$this->db = $GLOBALS['db'];
+		$this->db = self::setDatabase('localhost');
+		$this->turma = new TurmaEntity();
 	}
 
 	public function getById($turmaId = false) {
 		try {
-			if (!$turmaId) {
-				throw new \Exception("ID da Turma nao enviado");
-			}
-			return $this->db->getRow($this->table, '*', "id = ".$turmaId);
+			return $this->turma->populateMe(
+				$this->db->getRow(
+					$this->table,
+					'*',
+					"id = ".$turmaId
+				)
+			);
 		} catch (Exception $e) {
-			die('['.$this->classPath.'::getById] - '.  $e->getMessage());
+			throw('['.$this->classPath.'::getById] - '.  $e->getMessage());
 		}
 		return false;
 	}
 
 	public function listAll() {
 		try {
-			return $this->db->getAllRows($this->table, '*');
+			$turmas = $this->db->getAllRows($this->table, '*');
+			for ($i = 0; $i < count($turmas); $i++) {
+				$turma = new TurmaEntity();
+				$turmas[$i] = $turma->populateMe($turmas[$i]);
+			}
+			return $turmas;
 		} catch (Exception $e) {
-			die('['.$this->classPath.'::listAll] - '.  $e->getMessage());
+			throw('['.$this->classPath.'::listAll] - '.  $e->getMessage());
 		}
 	}
 
@@ -56,15 +68,12 @@ class Turma {
 			);
 			return $this->db->lastId();
 		} catch (Exception $e) {
-			die('['.$this->classPath.'::saveNewTurma] - '.  $e->getMessage());
+			throw('['.$this->classPath.'::saveNewTurma] - '.  $e->getMessage());
 		}
 	}
 
 	public function updateTurma($turma) {
 		try {
-			if (!$turma->getId()) {
-				throw new \Exception("Turma sem ID");
-			}
 			$this->db->updateRow(
 				$this->table,
 				array(
@@ -81,7 +90,7 @@ class Turma {
 			);
 			return true;
 		} catch (Exception $e) {
-			die('['.$this->classPath.'::updateTurma] - '.  $e->getMessage());
+			throw('['.$this->classPath.'::updateTurma] - '.  $e->getMessage());
 		}
 		return false;
 	}
@@ -97,7 +106,7 @@ class Turma {
 			);
 			return true;
 		} catch (Exception $e) {
-			die('['.$this->classPath.'::updateTurma] - '.  $e->getMessage());
+			throw('['.$this->classPath.'::updateTurma] - '.  $e->getMessage());
 		}
 		return false;
 	}
